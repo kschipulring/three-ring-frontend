@@ -2,27 +2,6 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-function OldApp() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
-
 class App extends React.Component {
   base_api_url = "http://3ringprototype.com/blog/wp-json";
 
@@ -68,7 +47,8 @@ class App extends React.Component {
     let menu_fetch = this.ajaxLoadThen( "/menus/v1/menus/test-nav-1", (result) => {
       let page_id_arr = result.items.map((item) => {
         return item.child_items ?
-        [item.object_id, item.child_items.map( (c_item) => c_item.object_id )] : item.object_id;
+        [item.object_id, item.child_items.map( (c_item) => c_item.object_id )] :
+         item.object_id;
       });
 
       console.log( "page_id_arr = ", page_id_arr );
@@ -112,7 +92,8 @@ class App extends React.Component {
   }
 
   render() {
-    const { error, isLoaded, items } = this.state; console.log( "this.state = ", this.state );
+    const { error, isLoaded, items } = this.state;
+    console.log( "this.state = ", this.state );
 
     if (error) {
       return <div>Error: {error.message}</div>;
