@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 
 class App extends React.Component {
+  blog_url = "http://3ringprototype.com/blog";
   base_api_url = "http://3ringprototype.com/blog/wp-json";
 
   constructor(props) {
@@ -41,10 +42,30 @@ class App extends React.Component {
     );
   }
 
+  navItem( item ){
+    var short_url = item.url.replace(this.blog_url, "");
+
+    var ret_str = "\n\t<li><a href=\"" + short_url + "\">" + item.title + "</a>";
+
+    if( item["child_items"] ){
+      ret_str += "\n<ul>";
+      for(let j in item["child_items"] ){
+        ret_str += this.navItem( item["child_items"][j] );
+      }
+      ret_str += "\n</ul>";
+    }
+
+    ret_str += "</li>";
+
+    return ret_str;
+  }
+
   componentDidMount() {
     console.log( "this.state.page_ids_str = ", this.state.page_ids_str );
 
     let menu_fetch = this.ajaxLoadThen( "/menus/v1/menus/test-nav-1", (result) => {
+
+      //getting the page ids to be list to collect from
       let page_id_arr = result.items.map((item) => {
         return item.child_items ?
         [item.object_id, item.child_items.map( (c_item) => c_item.object_id )] :
@@ -68,6 +89,11 @@ class App extends React.Component {
       }
 
       new_state.big_obj = big_obj;
+
+      //get the navigation
+      let nav_render = result.items.map( item => this.navItem( item ) );
+
+      console.log( nav_render );
 
       this.setState( new_state );
     });
