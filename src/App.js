@@ -4,7 +4,7 @@ import './App.css';
 
 class App extends React.Component {
   blog_url = "http://3ringprototype.com/blog";
-  base_api_url = "http://3ringprototype.com/blog/wp-json";
+  base_api_url = `${this.blog_url}/wp-json`;
 
   constructor(props) {
     super(props);
@@ -45,19 +45,22 @@ class App extends React.Component {
   navItem( item ){
     var short_url = item.url.replace(this.blog_url, "");
 
-    var ret_str = "\n\t<li><a href=\"" + short_url + "\">" + item.title + "</a>";
+    var return_jsx = [];
+
+    return_jsx.push( <a href={short_url} key={item.ID}>{item.title}</a> );
 
     if( item["child_items"] ){
-      ret_str += "\n<ul>";
       for(let j in item["child_items"] ){
-        ret_str += this.navItem( item["child_items"][j] );
+
+        return_jsx.push(
+          <ul key={item["child_items"][j].ID}>
+            { this.navItem( item["child_items"][j]) }
+          </ul>
+        );        
       }
-      ret_str += "\n</ul>";
     }
 
-    ret_str += "</li>";
-
-    return ret_str;
+    return <li key={item.ID}>{return_jsx}</li>;
   }
 
   componentDidMount() {
@@ -90,10 +93,8 @@ class App extends React.Component {
 
       new_state.big_obj = big_obj;
 
-      //get the navigation
-      let nav_render = result.items.map( item => this.navItem( item ) );
-
-      console.log( nav_render );
+      //get the nav items to the state
+      new_state.nav_items = result.items;
 
       this.setState( new_state );
     });
@@ -118,8 +119,16 @@ class App extends React.Component {
   }
 
   render() {
-    const { error, isLoaded, items } = this.state;
+    const { error, isLoaded, items, nav_items } = this.state;
     console.log( "this.state = ", this.state );
+
+    var nav_render = "";
+    
+    if(nav_items && typeof(nav_items) === "object" ){
+      //get the navigation html
+      nav_render = nav_items.map( item => this.navItem( item ) );
+    }
+
 
     if (error) {
       return <div>Error: {error.message}</div>;
@@ -130,6 +139,7 @@ class App extends React.Component {
 
       return (
         <main>
+          {nav_render}
           {items.map(item => (
             <section key={item.id}
             id={ item.title.rendered.replace(/\s/g, "-") }
