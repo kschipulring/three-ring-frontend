@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactHtmlParser, { processNodes, convertNodeToElement, htmlparser2 } from 'react-html-parser';
+import ReactHtmlParser from 'react-html-parser';
 import logo from './logo.svg';
 import './App.css';
 
@@ -20,6 +20,12 @@ class App extends React.Component {
     };
   }
 
+  /**
+   * Universal middleware function for AJAX functions.
+   * @param {string} ep - URL endpoint.
+   * @param {function} curry_func - URL endpoint.
+   * @return {void}
+   */
   ajaxLoadThen( ep, curry_func ){
 
     return fetch( this.base_api_url + ep)
@@ -46,6 +52,11 @@ class App extends React.Component {
     );
   }
 
+  /**
+   * Returns an individual navigation item in jsx html from a nav item object.
+   * @param {object} item - URL endpoint.
+   * @return {object<jsx>} - an individual navigation html in jsx format
+   */
   navItem( item ){
     var short_url = item.url.replace(this.blog_url, "");
 
@@ -68,8 +79,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    console.log( "this.state.page_ids_str = ", this.state.page_ids_str );
-
+    //when the initial AJAX operation, for the nav menu occurs.
     let menu_fetch = this.ajaxLoadThen( this.ep_nav, (result) => {
 
       //getting the page ids to be list to collect from
@@ -78,13 +88,14 @@ class App extends React.Component {
         [item.object_id, item.child_items.map( (c_item) => c_item.object_id )] :
          item.object_id;
       });
-
-      console.log( "page_id_arr = ", page_id_arr );
-
+      
+      //flatten the array into a one dimensional array with 2 steps.
       let page_ids_str = page_id_arr.join();
 
+      //the final page id array
       let page_ids_1Darr = page_ids_str.split(",");
 
+      //to update the core state.
       let new_state = this.state;
 
       new_state.page_ids_str = page_ids_str;
@@ -92,7 +103,7 @@ class App extends React.Component {
       let big_obj = {};
 
       for( let i=0; i<page_ids_1Darr.length; i++ ){
-        big_obj[ "i_" + i + "_" + page_ids_1Darr[i] ] = {"content": "dog_feces"};
+        big_obj[ `i_${i}_` + page_ids_1Darr[i] ] = {"content": "this_is_a_test"};
       }
 
       new_state.big_obj = big_obj;
@@ -103,13 +114,16 @@ class App extends React.Component {
       this.setState( new_state );
     });
 
-
+    /*
+    now that the final list of page IDs have been retrieved, get all their
+    associated pages with their HTML content.
+    */
     menu_fetch.then(() => {
       console.log( "this = ", this );
 
-      let pages_ep = `/wp/v2/pages?order=asc&orderby=include&include=${this.state.page_ids_str}`;
+      let pages_ep = `${this.ep_pages}${this.state.page_ids_str}`;
 
-      let pages_fetch = this.ajaxLoadThen(pages_ep, (result) => {
+      this.ajaxLoadThen(pages_ep, (result) => {
         console.log( "the result of pages = ", result );
 
         let new_state = this.state;
@@ -133,7 +147,7 @@ class App extends React.Component {
       nav_render = nav_items.map( item => this.navItem( item ) );
     }
 
-
+    //the rendering of navigation menu and html to the page.
     if (error) {
       return <div>Error: {error.message}</div>;
     } else if (!isLoaded || items.length < 1) {
