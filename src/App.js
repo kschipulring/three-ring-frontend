@@ -1,10 +1,14 @@
 import React from 'react';
+import ReactHtmlParser, { processNodes, convertNodeToElement, htmlparser2 } from 'react-html-parser';
 import logo from './logo.svg';
 import './App.css';
 
 class App extends React.Component {
   blog_url = "http://3ringprototype.com/blog";
   base_api_url = `${this.blog_url}/wp-json`;
+
+  ep_nav = "/menus/v1/menus/test-nav-1";
+  ep_pages = "/wp/v2/pages?order=asc&orderby=include&include=";
 
   constructor(props) {
     super(props);
@@ -66,7 +70,7 @@ class App extends React.Component {
   componentDidMount() {
     console.log( "this.state.page_ids_str = ", this.state.page_ids_str );
 
-    let menu_fetch = this.ajaxLoadThen( "/menus/v1/menus/test-nav-1", (result) => {
+    let menu_fetch = this.ajaxLoadThen( this.ep_nav, (result) => {
 
       //getting the page ids to be list to collect from
       let page_id_arr = result.items.map((item) => {
@@ -103,7 +107,7 @@ class App extends React.Component {
     menu_fetch.then(() => {
       console.log( "this = ", this );
 
-      let pages_ep = "/wp/v2/pages?include=" + this.state.page_ids_str + "&order=asc&orderby=include";
+      let pages_ep = `/wp/v2/pages?order=asc&orderby=include&include=${this.state.page_ids_str}`;
 
       let pages_fetch = this.ajaxLoadThen(pages_ep, (result) => {
         console.log( "the result of pages = ", result );
@@ -141,11 +145,10 @@ class App extends React.Component {
         <main>
           {nav_render}
           {items.map(item => (
-            <section key={item.id}
-            id={ item.title.rendered.replace(/\s/g, "-") }
-            dangerouslySetInnerHTML={{
-              __html: `<h2>${item.title.rendered}</h2>` + item.content.rendered
-            }} >
+            <section key={item.id} id={ item.title.rendered.replace(/\s/g, "-") } >
+            {
+              ReactHtmlParser(`<h2>${item.title.rendered}</h2>${item.content.rendered}`)
+            }
             </section>
           ))}
         </main>
@@ -153,6 +156,5 @@ class App extends React.Component {
     }
   }
 }
-
 
 export default App;
