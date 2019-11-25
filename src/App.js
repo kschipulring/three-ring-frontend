@@ -53,8 +53,32 @@ class App extends React.Component {
   }
 
   /**
+   * To get rid of annoying html entities and replace them with what they are supposed to render as.
+   * @param {string} html - the source html.
+   * @return {string} - the processed html.
+   */
+  decodeEntities(html) {
+    var cache = {},
+        character,
+        e = document.createElement('div');
+
+    return html.replace(/([&][^&; ]+[;])/g, function(entity) {
+      character = cache[entity];
+      if (!character) {
+        e.innerHTML = entity;
+        if (e.childNodes[0])
+          character = cache[entity] = e.childNodes[0].nodeValue;
+        else
+          character = '';
+      }
+      return character;
+    });
+  }
+
+
+  /**
    * Returns an individual navigation item in jsx html from a nav item object.
-   * @param {object} item - URL endpoint.
+   * @param {object} item - navigation item source object.
    * @return {object<jsx>} - an individual navigation html in jsx format
    */
   navItem( item ){
@@ -62,7 +86,9 @@ class App extends React.Component {
 
     var return_jsx = [];
 
-    return_jsx.push( <a href={short_url} key={item.ID}>{item.title}</a> );
+    return_jsx.push( <a href={short_url} key={item.ID}>{
+      this.decodeEntities( item.title )
+    }</a> );
 
     if( item["child_items"] ){
       for(let j in item["child_items"] ){
@@ -98,15 +124,8 @@ class App extends React.Component {
       //to update the core state.
       let new_state = this.state;
 
+      //attach the ids list to the state
       new_state.page_ids_str = page_ids_str;
-
-      let big_obj = {};
-
-      for( let i=0; i<page_ids_1Darr.length; i++ ){
-        big_obj[ `i_${i}_` + page_ids_1Darr[i] ] = {"content": "this_is_a_test"};
-      }
-
-      new_state.big_obj = big_obj;
 
       //get the nav items to the state
       new_state.nav_items = result.items;
@@ -142,6 +161,7 @@ class App extends React.Component {
 
     var nav_render = "";
     
+    //if the navigation html menu is ready, the populate above variable with it.
     if(nav_items && typeof(nav_items) === "object" ){
       //get the navigation html
       nav_render = nav_items.map( item => this.navItem( item ) );
@@ -155,13 +175,17 @@ class App extends React.Component {
     } else {
       console.log( items );
 
+      //console.log( this.decodeEntities(items[4].content.rendered) );
+
       return (
         <main>
           {nav_render}
           {items.map(item => (
-            <section key={item.id} id={ item.title.rendered.replace(/\s/g, "-") } >
+            <section key={item.id} id={ item.title.rendered.toLowerCase().replace(/\s/g, "-") } >
             {
-              ReactHtmlParser(`<h2>${item.title.rendered}</h2>${item.content.rendered}`)
+              ReactHtmlParser(
+                `<h2>${item.title.rendered}</h2>${item.content.rendered}`
+              )
             }
             </section>
           ))}
