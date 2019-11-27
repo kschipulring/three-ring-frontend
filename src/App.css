@@ -20,3 +20,70 @@
 .App-link {
   color: #09d3ac;
 }
+
+nav{
+  background-color: #C55;
+  width: 388px;
+}
+
+button.nav_expander {
+  line-height: 10px;
+  padding: 0px 10px 20px 10px;
+  font-weight: bold;
+  font-size: 32px;
+  height: 46px;
+  cursor: pointer;
+  background-color:transparent;
+  border: none;
+}
+
+button.nav_expander span {
+  margin-top: -10px;
+  display: block;
+}
+
+button.nav_expander span.default {
+}
+
+button.nav_expander span.expanded {
+  display: none;
+}
+
+nav > ul {
+  padding-top: 31px;
+  padding-bottom: 31px;
+  padding-left: 20px;
+
+  -webkit-transition: 1.5s;
+  -moz-transition: 1.5s;
+  -o-transition: 1.5s;
+  transition: 1.5s;
+}
+
+nav li{
+  list-style: none;
+  padding:5px;
+}
+
+nav li a{
+  font-size: 28px;
+  color:white;
+  text-decoration: none;
+}
+nav > ul li:hover > a{
+  opacity:0.5;
+}
+
+.show{
+  /*display:default;*/
+  opacity:1;
+  height: inherit;
+  transition: height 1500ms 1500ms, opacity 1500ms 0ms;
+}
+
+.hide{
+  /*display:none;*/
+  opacity:0;
+  height: 0px;
+  transition: height 1500ms 1500ms, opacity 1500ms 0ms;
+}

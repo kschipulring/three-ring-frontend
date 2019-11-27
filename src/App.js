@@ -16,8 +16,12 @@ class App extends React.Component {
       error: null,
       isLoaded: false,
       items: [],
-      page_ids_str: ""
+      page_ids_str: "",
+      menu_active: false
     };
+
+    // This binding is necessary to make `this` work in the callback
+    this.showMenu = this.showMenu.bind(this);
   }
 
   /**
@@ -66,10 +70,11 @@ class App extends React.Component {
       character = cache[entity];
       if (!character) {
         e.innerHTML = entity;
-        if (e.childNodes[0])
+        if (e.childNodes[0]){
           character = cache[entity] = e.childNodes[0].nodeValue;
-        else
+        } else{
           character = '';
+        }
       }
       return character;
     });
@@ -155,9 +160,17 @@ class App extends React.Component {
     });
   }
 
+  showMenu(){
+    //base the menu visibility on the state property
+    let new_state = this.state;
+
+    new_state.menu_active = !this.state.menu_active;
+
+    this.setState(new_state);
+  }
+
   render() {
     const { error, isLoaded, items, nav_items } = this.state;
-    console.log( "this.state = ", this.state );
 
     var nav_render = "";
     
@@ -175,11 +188,19 @@ class App extends React.Component {
     } else {
       console.log( items );
 
-      //console.log( this.decodeEntities(items[4].content.rendered) );
+      var navClassName = this.state.menu_active ? "show" : "hide";
 
       return (
         <main>
-          {nav_render}
+          <button onClick={this.showMenu} className="nav_expander">
+            <span className="default">_<br/>_<br/>_</span>
+            <span className="expanded {navClassName}">X</span>
+          </button>
+          <nav className={navClassName}>
+            <ul>
+            {nav_render}
+            </ul>
+          </nav>
           {items.map(item => (
             <section key={item.id} id={ item.title.rendered.toLowerCase().replace(/\s/g, "-") } >
             {
