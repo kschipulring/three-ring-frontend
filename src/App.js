@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactHtmlParser from 'react-html-parser';
 import logo from './logo.svg';
-import './App.css';
+import './App.scss';
 
 class App extends React.Component {
   blog_url = "http://3ringprototype.com/blog";

@@ -1,3 +1,5 @@
+$transition-setting: height 1500ms 1500ms, opacity 1500ms 0ms;
+
 .App {
   text-align: center;
 }
@@ -24,6 +26,32 @@
 nav{
   background-color: #C55;
   width: 388px;
+
+  > ul {
+    padding-top: 31px;
+    padding-bottom: 31px;
+    padding-left: 20px;
+
+    -webkit-transition: 1.5s;
+    -moz-transition: 1.5s;
+    -o-transition: 1.5s;
+    transition: 1.5s;
+
+    li:hover > a{
+      opacity:0.5;
+    }
+  }
+
+  li{
+    list-style: none;
+    padding:5px;
+
+    a{
+      font-size: 28px;
+      color:white;
+      text-decoration: none;
+    }
+  }
 }
 
 button.nav_expander {
@@ -35,54 +63,29 @@ button.nav_expander {
   cursor: pointer;
   background-color:transparent;
   border: none;
-}
 
-button.nav_expander span {
-  margin-top: -10px;
-  display: block;
-}
+  span {
+    margin-top: -10px;
+    display: block;
+  }
 
-button.nav_expander span.default {
-}
+  span.default {
+  }
 
-button.nav_expander span.expanded {
-  display: none;
-}
-
-nav > ul {
-  padding-top: 31px;
-  padding-bottom: 31px;
-  padding-left: 20px;
-
-  -webkit-transition: 1.5s;
-  -moz-transition: 1.5s;
-  -o-transition: 1.5s;
-  transition: 1.5s;
-}
-
-nav li{
-  list-style: none;
-  padding:5px;
-}
-
-nav li a{
-  font-size: 28px;
-  color:white;
-  text-decoration: none;
-}
-nav > ul li:hover > a{
-  opacity:0.5;
+  span.expanded {
+    display: none;
+  }
 }
 
 .show{
   opacity:1;
   height: inherit;
-  transition: height 1500ms 1500ms, opacity 1500ms 0ms;
+  transition: $transition-setting;
 }
 
 .hide{
   opacity:0;
   height: 0px;
   overflow: hidden;
-  transition: height 1500ms 1500ms, opacity 1500ms 0ms;
+  transition: $transition-setting;
 }
