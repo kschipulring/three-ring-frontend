@@ -75,15 +75,14 @@ nav > ul li:hover > a{
 }
 
 .show{
-  /*display:default;*/
   opacity:1;
   height: inherit;
   transition: height 1500ms 1500ms, opacity 1500ms 0ms;
 }
 
 .hide{
-  /*display:none;*/
   opacity:0;
   height: 0px;
+  overflow: hidden;
   transition: height 1500ms 1500ms, opacity 1500ms 0ms;
 }
