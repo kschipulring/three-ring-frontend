@@ -26,6 +26,8 @@ $transition-setting: height 1500ms 1500ms, opacity 1500ms 0ms;
 nav{
   background-color: #C55;
   width: 388px;
+  right: 46px;
+  position: fixed;
 
   > ul {
     padding-top: 31px;
@@ -64,6 +66,10 @@ button.nav_expander {
   background-color:transparent;
   border: none;
 
+  position: fixed;
+  right: 46px;
+  top: 30px;
+
   span {
     margin-top: -10px;
     display: block;
@@ -89,3 +95,101 @@ button.nav_expander {
   overflow: hidden;
   transition: $transition-setting;
 }
+
+section {
+  margin:43px;
+
+  .wp-block-button__link{
+    background-color: #ec1919;
+    width: 272px;
+    height: 48px;
+    display: block;
+    text-align: center;
+    vertical-align: middle;
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    font-size: 30px;
+    font-family: calibri;
+    padding-top: 9px;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  button.nav_expander, nav{
+    right:25%;
+  }
+
+  section {
+    margin-left:86px;
+    margin-right:86px;
+  }
+}
+
+@media only screen and (min-width: 1152px) {
+  section {
+    margin-left:129px;
+    margin-right:129px;
+  }
+}
+
+
+/*
+.TopNavMenu-hamburger {
+  position: absolute;
+  z-index: 100;
+  right: 10px;
+  cursor: pointer;
+  transform-origin: 20% 50%;
+  opacity: 1;
+  transform: scaleX(0);
+  transition: 250ms opacity 200ms cubic-bezier(0.19, 1, 0.22, 1), 250ms transform 200ms cubic-bezier(0.19, 1, 0.22, 1);
+  width: 44px;
+  height: 44px;
+}
+.isDesktop .TopNavMenu-hamburger:hover div:after {
+  transform: scaleX(1);
+}
+@media (min-width: 1280px) {
+  .TopNavMenu-hamburger {
+    right: -48px;
+    top: -3px;
+    transform-origin: 10px 50%;
+  }
+}
+@media (min-width: 1152px) and (max-width: 1279px) {
+  .TopNavMenu-hamburger {
+    right: -48px;
+    top: -5px;
+    transform-origin: 10px 50%;
+  }
+}
+@media (min-width: 1024px) and (max-width: 1151px) {
+  .TopNavMenu-hamburger {
+    right: -48px;
+    top: -6px;
+    transform-origin: 10px 50%;
+  }
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  .TopNavMenu-hamburger {
+    top: -8px;
+    right: -43px;
+    transform-origin: 12px 50%;
+  }
+}
+@media (min-width: 667px) and (max-width: 767px) {
+  .TopNavMenu-hamburger {
+    top: -6px;
+    right: -42px;
+    transform-origin: 12px 50%;
+  }
+}
+@media (max-width: 666px) {
+  .TopNavMenu-hamburger {
+    right: 18px;
+    top: -8px;
+    transform-origin: 10px 50%;
+  }
+}
+*/
