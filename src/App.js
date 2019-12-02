@@ -8,7 +8,7 @@ class App extends React.Component {
   base_api_url = `${this.blog_url}/wp-json`;
 
   ep_nav = "/menus/v1/menus/test-nav-1";
-  ep_pages = "/wp/v2/pages?order=asc&orderby=include&include=";
+  ep_pages = "/wp/v2/pages?order=asc&_embed&orderby=include&include=";
 
   constructor(props) {
     super(props);
@@ -201,15 +201,28 @@ class App extends React.Component {
             {nav_render}
             </ul>
           </nav>
-          {items.map(item => (
-            <section key={item.id} id={ item.title.rendered.toLowerCase().replace(/\s/g, "-") } >
-            {
-              ReactHtmlParser(
-                `<h2>${item.title.rendered}</h2>${item.content.rendered}`
-              )
-            }
-            </section>
-          ))}
+          {items.map( (item) => {
+
+            let img_url = item._embedded['wp:featuredmedia'] ?
+                item._embedded['wp:featuredmedia'][0].source_url : "";
+
+            let img_tag = img_url ? <img src={img_url} /> : "";
+
+            return (
+              <section key={item.id}
+              id={ item.title.rendered.toLowerCase().replace(/\s/g, "-") }>
+              { img_tag }
+
+              <h2>{item.title.rendered}</h2>
+              {
+                ReactHtmlParser(
+                  `${item.content.rendered}`
+                )
+              }
+              </section>
+            )
+          }
+          )}
         </main>
       );
     }
