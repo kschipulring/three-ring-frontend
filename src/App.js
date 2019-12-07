@@ -123,9 +123,6 @@ class App extends React.Component {
       //flatten the array into a one dimensional array with 2 steps.
       let page_ids_str = page_id_arr.join();
 
-      //the final page id array
-      let page_ids_1Darr = page_ids_str.split(",");
-
       //to update the core state.
       let new_state = this.state;
 
@@ -197,9 +194,7 @@ class App extends React.Component {
             <span className="expanded {navClassName}">X</span>
           </button>
           <nav className={navClassName}>
-            <ul>
-            {nav_render}
-            </ul>
+            <ul> {nav_render} </ul>
           </nav>
           {items.map( (item) => {
 
@@ -213,14 +208,13 @@ class App extends React.Component {
             return (
               <section key={item.id}
               id={ item.title.rendered.toLowerCase().replace(/\s/g, "-") }>
-              { img_tag }
+                { img_tag }
 
-              <h2>{item.title.rendered}</h2>
-              {
-                ReactHtmlParser(
-                  `${item.content.rendered}`
-                )
-              }
+                <h2>{ this.decodeEntities(item.title.rendered) }</h2>
+                
+                {
+                  ReactHtmlParser( `${item.content.rendered}` )
+                }
               </section>
             )
           }
