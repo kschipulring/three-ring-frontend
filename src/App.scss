@@ -2,6 +2,11 @@
 
 $transition-setting: height 1500ms 1500ms, opacity 1500ms 0ms;
 
+
+button:focus {
+  outline: 0 !important;
+}
+
 .App {
   text-align: center;
 }
