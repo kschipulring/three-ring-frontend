@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactHtmlParser from 'react-html-parser';
-import logo from './logo.svg';
+//import logo from './logo.svg';
 import './App.scss';
 
 class App extends React.Component {
@@ -206,7 +206,9 @@ class App extends React.Component {
             let img_url = item._embedded['wp:featuredmedia'] ?
                 item._embedded['wp:featuredmedia'][0].source_url : "";
 
-            let img_tag = img_url ? <img src={img_url} /> : "";
+            let img_tag = img_url ?
+            <img src={img_url} className="header-img"
+            alt={item._embedded['wp:featuredmedia'][0].slug} /> : "";
 
             return (
               <section key={item.id}
