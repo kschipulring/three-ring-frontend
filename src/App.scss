@@ -1,3 +1,5 @@
+@import "./../node_modules/sass-autoprefixer/scss/prefixes";
+
 $transition-setting: height 1500ms 1500ms, opacity 1500ms 0ms;
 
 .App {
@@ -63,9 +65,6 @@ nav{
     padding-bottom: 31px;
     padding-left: 20px;
 
-    -webkit-transition: 1.5s;
-    -moz-transition: 1.5s;
-    -o-transition: 1.5s;
     transition: 1.5s;
 
     li:hover > a{
@@ -101,7 +100,7 @@ nav{
 section {
   margin:43px;
   margin-left: auto;
-    margin-right: auto;
+  margin-right: auto;
 
   img.header-img{
     max-width:40vw;
