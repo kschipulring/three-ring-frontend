@@ -103,9 +103,12 @@ nav{
 }
 
 section {
-  margin:43px;
-  margin-left: auto;
+  margin-top:43px;
+  margin-bottom: 100px;
+  margin-left: 8%;
   margin-right: auto;
+
+  height: calc( 100vh - 126px );
 
   img.header-img{
     max-width:40vw;
@@ -113,8 +116,14 @@ section {
     max-height: 40vh;
   }
 
+  h2{
+    font-size: 20pt;
+    color: #333;
+  }
+
   p {
-    color: #444;
+    color: #666;
+    font-size: 16pt;
   }
 
   .wp-block-button__link{
@@ -132,6 +141,16 @@ section {
     padding-top: 9px;
   }
 
+  a{
+    text-decoration: none;
+    color:black;
+    font-weight:bold;
+
+    &:hover{
+      text-decoration:underline;
+    }
+  }
+
   a:active, a:focus {
     outline: 0;
     border: none;
@@ -145,14 +164,25 @@ section {
   }
 
   section {
-    margin-left:86px;
-    margin-right:86px;
+    margin-left: 16%;
+
+    h2{
+      font-size: 32pt;
+    }
+    p {
+      font-size: 20pt;
+    }
   }
 }
 
 @media only screen and (min-width: 1152px) {
   section {
+    /*
     margin-left:129px;
     margin-right:129px;
+    */
+    /*margin-left: 16%;
+    margin-right: 16%;*/
+    width: 66%;
   }
 }
