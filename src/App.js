@@ -1,5 +1,13 @@
 import React from 'react';
 import ReactHtmlParser from 'react-html-parser';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useRouteMatch,
+  useParams
+} from "react-router-dom";
 //import logo from './logo.svg';
 import './App.scss';
 
@@ -78,6 +86,13 @@ class App extends React.Component {
       }
       return character;
     });
+  }
+
+  navAction(){
+    /* TODO
+    document.querySelector('#the-three-ring-advantage')
+    .scrollIntoView({behavior: 'smooth'});
+    */
   }
 
 
