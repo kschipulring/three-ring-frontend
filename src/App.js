@@ -106,9 +106,9 @@ class App extends React.Component {
 
     var return_jsx = [];
 
-    return_jsx.push( <a href={short_url} key={item.ID}>{
+    return_jsx.push( <Link to={short_url} key={item.ID}>{
       this.decodeEntities( item.title )
-    }</a> );
+    }</Link> );
 
     if( item["child_items"] ){
       for(let j in item["child_items"] ){
