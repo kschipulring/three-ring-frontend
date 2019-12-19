@@ -5,8 +5,7 @@ import {
   Switch,
   Route,
   Link,
-  useRouteMatch,
-  useParams
+  useRouteMatch
 } from "react-router-dom";
 
 import './App.scss';
@@ -198,46 +197,93 @@ class App extends React.Component {
     } else if (!isLoaded || items.length < 1) {
       return <div>Loading...</div>;
     } else {
-      console.log( items );
+      //console.log( items );
 
       var navClassName = this.state.menu_active ? "show" : "hide";
 
       return (
         <main>
-          <button onClick={this.showMenu} className="nav_expander">
-            <span className="default">_<br/>_<br/>_</span>
-            <span className="expanded {navClassName}">X</span>
-          </button>
-          <nav className={navClassName}>
-            <ul> {nav_render} </ul>
-          </nav>
-          {items.map( (item) => {
+          <Router>
+            {/* A <Switch> looks through its children <Route>s and
+                renders the first one that matches the current URL. */}
+            <Switch>
+              <Route path="/:pageId?/:innerPageId?">
+                <Home />
+              </Route>
+            </Switch>
 
-            let img_url = item._embedded['wp:featuredmedia'] ?
-                item._embedded['wp:featuredmedia'][0].source_url : "";
+            <button onClick={this.showMenu} className="nav_expander">
+              <span className="default">_<br/>_<br/>_</span>
+              <span className="expanded {navClassName}">X</span>
+            </button>
+            <nav id="main_nav" className={navClassName}>
+              <ul> {nav_render} </ul>
+            </nav>
+            {items.map( (item) => {
 
-            let img_tag = img_url ?
-            <img src={img_url} className="header-img"
-            alt={item._embedded['wp:featuredmedia'][0].slug} /> : "";
+              let img_url = item._embedded['wp:featuredmedia'] ?
+                  item._embedded['wp:featuredmedia'][0].source_url : "";
 
-            return (
-              <section key={item.id}
-              id={ item.title.rendered.toLowerCase().replace(/\s/g, "-") }>
-                { img_tag }
+              let img_tag = img_url ?
+              <img src={img_url} className="header-img"
+              alt={item._embedded['wp:featuredmedia'][0].slug} /> : "";
 
-                <h2>{ this.decodeEntities(item.title.rendered) }</h2>
-                
-                {
-                  ReactHtmlParser( `${item.content.rendered}` )
-                }
-              </section>
-            )
-          }
-          )}
+              return (
+                <article key={item.id}
+                id={ item.title.rendered.toLowerCase().replace(/\s/g, "-") }>
+                  { img_tag }
+
+                  <h2>{ this.decodeEntities(item.title.rendered) }</h2>
+
+                  {
+                    ReactHtmlParser( item.content.rendered, {
+
+                      transform: (node, k) => {
+                        if (node.type === 'tag' && node.name === 'a') {
+                          return (
+                          <Link to={node.attribs.href}
+                          className={node.attribs.class || ''} key={k}>
+                            {
+                              node.children.map((item) => {
+                                let retval = item.data || item.children.map(
+                                  i => i.data || "" );
+
+                                return retval;
+                              })
+                            }
+                          </Link>
+                          );
+                        }
+                      }
+
+                    })
+                  }
+                </article>
+              )
+            }
+            )}
+          </Router>
         </main>
       );
     }
   }
+}
+
+function Home() {
+  let match = useRouteMatch();
+  
+  console.log( match );
+
+  let element = document.getElementById( match.params.pageId );
+
+  console.log( match.params.pageId , element);
+
+  if( element ){
+    element.scrollIntoView({behavior: 'smooth'});
+  }
+  
+  
+  return <h2>current route test: {match.url}</h2>;
 }
 
 export default App;
