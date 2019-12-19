@@ -8,7 +8,7 @@ import {
   useRouteMatch,
   useParams
 } from "react-router-dom";
-//import logo from './logo.svg';
+
 import './App.scss';
 
 class App extends React.Component {
