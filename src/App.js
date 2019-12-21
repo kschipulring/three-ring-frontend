@@ -154,15 +154,18 @@ class App extends React.Component {
     this.setState(new_state);
   }
 
+  /**
+   * THE event handler for url routing in this app.  Really just scrolls to
+   *  where the URL has a bookmark for.
+   * @param {void}
+   * @return {object<jsx>} - the html which outputs. Not really needed except for testing.
+   */
   RouteHandle(){
     let match = useRouteMatch();
+
+    let element = document.getElementById( match.url );
   
-    console.log( match );
-  
-    let element = document.getElementById( match.params.pageId );
-  
-    console.log( match.params.pageId , element);
-  
+    //scroll to the particular section of the page.
     if( element ){
       element.scrollIntoView({behavior: 'smooth'});
     }
@@ -187,7 +190,7 @@ class App extends React.Component {
     } else if (!isLoaded || items.length < 1) {
       return <div>Loading...</div>;
     } else {
-      //console.log( items );
+      console.log( {items} );
 
       var navClassName = this.state.menu_active ? "show" : "hide";
 
@@ -220,7 +223,7 @@ class App extends React.Component {
 
               return (
                 <article key={item.id}
-                id={ item.title.rendered.toLowerCase().replace(/\s/g, "-") }>
+                id={ item.link.replace(this.blog_url, "") }>
                   { img_tag }
 
                   <h2>{ Utilities.decodeEntities(item.title.rendered) }</h2>
