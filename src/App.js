@@ -8,6 +8,9 @@ import {
   useRouteMatch
 } from "react-router-dom";
 
+import Utilities from './Utilities.js';
+//import NavBar from './NavBar.js';
+
 import './App.scss';
 
 class App extends React.Component {
@@ -64,38 +67,6 @@ class App extends React.Component {
   }
 
   /**
-   * To get rid of annoying html entities and replace them with what they are supposed to render as.
-   * @param {string} html - the source html.
-   * @return {string} - the processed html.
-   */
-  decodeEntities(html) {
-    var cache = {},
-        character,
-        e = document.createElement('div');
-
-    return html.replace(/([&][^&; ]+[;])/g, function(entity) {
-      character = cache[entity];
-      if (!character) {
-        e.innerHTML = entity;
-        if (e.childNodes[0]){
-          character = cache[entity] = e.childNodes[0].nodeValue;
-        } else{
-          character = '';
-        }
-      }
-      return character;
-    });
-  }
-
-  navAction(){
-    /* TODO
-    document.querySelector('#the-three-ring-advantage')
-    .scrollIntoView({behavior: 'smooth'});
-    */
-  }
-
-
-  /**
    * Returns an individual navigation item in jsx html from a nav item object.
    * @param {object} item - navigation item source object.
    * @return {object<jsx>} - an individual navigation html in jsx format
@@ -106,7 +77,7 @@ class App extends React.Component {
     var return_jsx = [];
 
     return_jsx.push( <Link to={short_url} key={item.ID}>{
-      this.decodeEntities( item.title )
+      Utilities.decodeEntities( item.title )
     }</Link> );
 
     if( item["child_items"] ){
@@ -233,29 +204,15 @@ class App extends React.Component {
                 id={ item.title.rendered.toLowerCase().replace(/\s/g, "-") }>
                   { img_tag }
 
-                  <h2>{ this.decodeEntities(item.title.rendered) }</h2>
+                  <h2>{ Utilities.decodeEntities(item.title.rendered) }</h2>
 
                   {
                     ReactHtmlParser( item.content.rendered, {
-
                       transform: (node, k) => {
                         if (node.type === 'tag' && node.name === 'a') {
-                          return (
-                          <Link to={node.attribs.href}
-                          className={node.attribs.class || ''} key={k}>
-                            {
-                              node.children.map((item) => {
-                                let retval = item.data || item.children.map(
-                                  i => i.data || "" );
-
-                                return retval;
-                              })
-                            }
-                          </Link>
-                          );
+                          return Utilities.a2LinkTransform(node, k);
                         }
                       }
-
                     })
                   }
                 </article>
