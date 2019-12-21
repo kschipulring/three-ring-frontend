@@ -125,8 +125,6 @@ class App extends React.Component {
     associated pages with their HTML content.
     */
     menu_fetch.then(() => {
-      console.log( "this = ", this );
-
       let pages_ep = `${this.ep_pages}${this.state.page_ids_str}`;
 
       this.ajaxLoadThen(pages_ep, (result) => {
@@ -142,6 +140,11 @@ class App extends React.Component {
     });
   }
 
+  /**
+   * Toggles the main top menu only. This works by changing that state attribute.
+   * @param {void}
+   * @return {void}
+   */
   showMenu(){
     //base the menu visibility on the state property
     let new_state = this.state;
@@ -149,6 +152,22 @@ class App extends React.Component {
     new_state.menu_active = !this.state.menu_active;
 
     this.setState(new_state);
+  }
+
+  RouteHandle(){
+    let match = useRouteMatch();
+  
+    console.log( match );
+  
+    let element = document.getElementById( match.params.pageId );
+  
+    console.log( match.params.pageId , element);
+  
+    if( element ){
+      element.scrollIntoView({behavior: 'smooth'});
+    }
+    
+    return <h2>current route test: {match.url}</h2>;
   }
 
   render() {
@@ -179,7 +198,7 @@ class App extends React.Component {
                 renders the first one that matches the current URL. */}
             <Switch>
               <Route path="/:pageId?/:innerPageId?">
-                <Home />
+                <this.RouteHandle />
               </Route>
             </Switch>
 
@@ -224,23 +243,6 @@ class App extends React.Component {
       );
     }
   }
-}
-
-function Home() {
-  let match = useRouteMatch();
-  
-  console.log( match );
-
-  let element = document.getElementById( match.params.pageId );
-
-  console.log( match.params.pageId , element);
-
-  if( element ){
-    element.scrollIntoView({behavior: 'smooth'});
-  }
-  
-  
-  return <h2>current route test: {match.url}</h2>;
 }
 
 export default App;
