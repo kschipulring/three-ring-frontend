@@ -144,7 +144,8 @@ class App extends React.Component {
       element.scrollIntoView({behavior: 'smooth'});
     }
     
-    return <h2>current route test: {match.url}</h2>;
+    //return <h2>current route test: {match.url}</h2>;
+    return "";
   }
 
   render() {
