@@ -129,7 +129,15 @@ class App extends React.Component {
   RouteHandle(){
     let match = useRouteMatch();
 
-    let element = document.getElementById( match.url );
+    /* 
+    hack for making the page scroll up to home if there are no characters in 
+    the new route. (Like after when someone hits a '/home/' link, which 
+    redirects to '/', but which would also not directly pertain to an element
+    with the article that has the id of '/home/').
+    */
+    let mu = match.url.length > 1 ? match.url : "/home/";
+
+    let element = document.getElementById( mu );
   
     //scroll to the particular section of the page.
     if( element ){
@@ -156,6 +164,7 @@ class App extends React.Component {
             {/* A <Switch> looks through its children <Route>s and
                 renders the first one that matches the current URL. */}
             <Switch>
+              <Redirect from='/home/' to='/' />
               <Route path="/:pageId?/:innerPageId?">
                 <this.RouteHandle />
               </Route>
