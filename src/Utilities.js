@@ -13,18 +13,20 @@ export default class Utilities {
       character,
       e = document.createElement('div');
 
-    return html.replace(/([&][^&; ]+[;])/g, function(entity) {
-      character = cache[entity];
-      if (!character) {
-        e.innerHTML = entity;
-        if (e.childNodes[0]){
-          character = cache[entity] = e.childNodes[0].nodeValue;
-        } else{
-          character = '';
+    if( html.replace ){
+      return html.replace(/([&][^&; ]+[;])/g, function(entity) {
+        character = cache[entity];
+        if (!character) {
+          e.innerHTML = entity;
+          if (e.childNodes[0]){
+            character = cache[entity] = e.childNodes[0].nodeValue;
+          } else{
+            character = '';
+          }
         }
-      }
-      return character;
-    });
+        return character;
+      });
+    }
   }
 
   /**
@@ -38,7 +40,7 @@ export default class Utilities {
    */
   static a2LinkTransform(node, k){
     return (
-    <Link to={node.attribs.href} className={node.attribs.class || ''} key={k}>
+    <Link to={node.attribs.href} className={node.attribs.class || "" } key={k}>
       {
         node.children.map(
           (item) => item.data || item.children.map( i => i.data || "" )
