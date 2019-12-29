@@ -126,7 +126,7 @@ article {
     font-size: 16pt;
   }
 
-  .wp-block-button__link{
+  .wp-block-button__link, & .wpforms-submit{
     background-color: #9c0d0d;
     width: 272px;
     height: 48px;
@@ -139,6 +139,17 @@ article {
     font-size: 30px;
     font-family: calibri;
     padding-top: 9px;
+  }
+
+  .wpforms-submit{
+    border:none;
+    height: 57px;
+    padding-top: 0px;
+    cursor: pointer;
+  }
+
+  .wpforms-submit:hover{
+    text-decoration:underline;
   }
 
   a{
@@ -187,7 +198,27 @@ article {
     }
   }
 
+  .wpforms-field-label{
+    clear: both;
+    display: block;
+    font-weight: bold;
+    color: #444;
+    font-size: 13pt;
+    padding-bottom: 3pt;
 
+    .wpforms-required-label{
+      color:#C00;
+    }
+  }
+
+  .wpforms-field-medium{
+    font-size: 12pt;
+    width: 80%;
+    min-width: 200px;
+    padding: 8pt;
+    margin-bottom: 14pt;
+    border: #BBB thin solid;
+  }
 }
 
 @media only screen and (min-width: 768px) {
