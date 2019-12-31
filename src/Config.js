@@ -1,5 +1,6 @@
 export default class Config{
-  static blog_url = "http://3ringprototype.com/blog";
+  static base_url = "http://3ringprototype.com";
+  static blog_url = `${this.base_url}/blog`;
   static base_api_url = `${this.blog_url}/wp-json`;
 
   static ep_nav = "/menus/v1/menus/test-nav-1";
