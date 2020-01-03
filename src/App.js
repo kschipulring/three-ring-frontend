@@ -15,6 +15,8 @@ import NavBar from './NavBar';
 import './App.scss';
 
 class App extends React.Component {
+  static current_page = "";
+
   constructor(props) {
     super(props);
     this.state = {
@@ -94,7 +96,7 @@ class App extends React.Component {
       let pages_ep = `${Config.ep_pages}${this.state.page_ids_str}`;
 
       this.ajaxLoadThen(pages_ep, (result) => {
-        console.log( "the result of pages = ", result );
+        //console.log( "the result of pages = ", result );
 
         let new_state = this.state;
 
@@ -126,7 +128,7 @@ class App extends React.Component {
    * @param {void}
    * @return {object<jsx>} - the html which outputs. Not really needed except for testing.
    */
-  RouteHandle(){
+  RouteHandle(params){
     let match = useRouteMatch();
 
     /* 
@@ -137,15 +139,15 @@ class App extends React.Component {
     */
     let mu = match.url.length > 1 ? match.url : "/home/";
 
-    let element = document.getElementById( mu );
-  
-    //scroll to the particular section of the page.
-    if( element ){
-      element.scrollIntoView({behavior: 'smooth'});
-    }
-    
-    //return <h2>current route test: {match.url}</h2>;
+    App.current_page = mu;
+
+    params.ready();
+
     return "";
+  }
+
+  static liquidDogshit(){
+    return "needles in your eyes";
   }
 
   render() {
@@ -167,7 +169,7 @@ class App extends React.Component {
             <Switch>
               <Redirect from='/home/' to='/' />
               <Route path="/:pageId?/:innerPageId?">
-                <this.RouteHandle />
+                <this.RouteHandle ready={ this.pageScrollTo } />
               </Route>
             </Switch>
 
@@ -192,12 +194,19 @@ class App extends React.Component {
                   { img_tag }
 
                   <h2>{ Utilities.decodeEntities(item.title.rendered) }</h2>
-
                   {
                     ReactHtmlParser( item.content.rendered, {
                       transform: (node, k) => {
-                        if (node.type === 'tag' && node.name === 'a') {
-                          return Utilities.a2LinkTransform(node, k);
+                        if (node.type === 'tag' ) {
+                          switch(node.name) {
+                            case "a":
+                              return Utilities.a2LinkTransform(node, k);
+                            case "form":
+                              return Utilities.formTransform(node, k);
+                            default:
+                            break;
+                          }
+                          
                         }
                       }
                     })
@@ -210,6 +219,21 @@ class App extends React.Component {
         </main>
       );
     }
+  }
+
+  pageScrollTo(){
+    let element = document.getElementById( App.current_page );
+  
+    //scroll to the particular section of the page.
+    if( element ){
+      element.scrollIntoView({behavior: 'smooth'});
+    }
+  }
+
+  componentDidUpdate(){
+    console.log( "component did update test" );
+
+    this.pageScrollTo();
   }
 }
 
