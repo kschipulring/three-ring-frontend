@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactHtmlParser from 'react-html-parser';
+import ReactHtmlParser, { convertNodeToElement } from 'react-html-parser';
 import {
   BrowserRouter as Router,
   Switch,
@@ -11,6 +11,8 @@ import {
 import Config from './Config';
 import Utilities from './Utilities';
 import NavBar from './NavBar';
+
+import ReactiveForm from './ReactiveForm';
 
 import './App.scss';
 
@@ -202,7 +204,10 @@ class App extends React.Component {
                             case "a":
                               return Utilities.a2LinkTransform(node, k);
                             case "form":
-                              return Utilities.formTransform(node, k);
+                              return <ReactiveForm {...node.attribs} k={k}
+                              children={node.children} />;
+
+                              //return Utilities.formTransform(node, k);
                             default:
                             break;
                           }
