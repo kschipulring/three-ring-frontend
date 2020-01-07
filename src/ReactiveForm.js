@@ -2,38 +2,57 @@ import React from 'react';
 
 import Config from './Config';
 import Utilities from './Utilities';
+import ReCAPTCHA from "react-google-recaptcha";
+
+import { convertNodeToElement } from 'react-html-parser';
+
+const TEST_SITE_KEY = "6Le5-T4UAAAAAL09DMkA6dffu36NsuFwg2a-Q5WC";
 
 class ReactiveForm extends React.Component {
   render(){
+    let {props} = this;
 
-    let new_action = node.attribs.action.includes(Config.base_url) ? 
-    node.attribs.action : Config.base_url + node.attribs.action;
+    console.log( props.children );
 
-    return (
-      <form action={new_action} className={node.attribs.class || "" }
-        id={node.attribs.id || ""} encType={node.attribs.enctype || ""}
-        key={k} onSubmit={this.handleSubmit}>
-        {
+    return <form  action={props.action} className={props.class || "" }
+    id={props.id || ""} encType={props.enctype || ""} k={props.k}>
+    {
 
-          node.children.map(
-            (item, k) => convertNodeToElement(item, k, (node, k) => {
-              if (node.type === 'tag' ) {
+      props.children.map(
+        (item, k) => convertNodeToElement(item, k, (node, k) => {
+          if (node.type === 'tag' ) {
 
-                switch(node.name) {
-                  case "input":
-                    return Utilities.inputTransform(node, k);
-                  case "textarea":
-                    return Utilities.textAreaTransform(node, k);
-                  default:
-                  break;
+            switch(node.name) {
+              case "select":
+                return Utilities.selectTransform(node, k);
+              case "input":
+                return Utilities.inputTransform(node, k);
+              case "textarea":
+                return Utilities.textAreaTransform(node, k);
+              case "div":
+
+                let retval = "";
+
+                if( node.attribs.class === "wpcf7-form-control-wrap" ){
+                  retval = <ReCAPTCHA
+                      style={{ display: "inline-block" }}
+                      sitekey={TEST_SITE_KEY}
+                      key={k}
+                    />;
+                }else{
+                  retval = convertNodeToElement(node, k);
                 }
-                
-              }
-            })
-          )
-        }
-      </form>
-    );
+
+                return retval;
+              default:
+              break;
+            }
+            
+          }
+        })
+      )
+    }
+    </form>;
   }
 }
 
