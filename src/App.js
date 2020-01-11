@@ -148,10 +148,6 @@ class App extends React.Component {
     return "";
   }
 
-  static liquidDogshit(){
-    return "needles in your eyes";
-  }
-
   render() {
     const { error, isLoaded, items, nav_items } = this.state;
 

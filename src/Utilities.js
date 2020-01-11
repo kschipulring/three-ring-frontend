@@ -70,44 +70,6 @@ export default class Utilities {
     );
   }
 
-  static formTransform(node, k){
-    let new_action = node.attribs.action.includes(Config.base_url) ? 
-      node.attribs.action : Config.base_url + node.attribs.action;
-
-    //console.log( node.children );
-
-    return (
-      <form action={new_action} className={node.attribs.class || "" }
-        id={node.attribs.id || ""} encType={node.attribs.enctype || ""}
-        key={k} onSubmit={this.handleSubmit}>
-        {
-          /**
-           * convertNodeToElement(node, index, transform);
-          */
-          
-          node.children.map(
-            (item, k) => convertNodeToElement(item, k, (node, k) => {
-              if (node.type === 'tag' ) {
-
-                switch(node.name) {
-                  case "select":
-                    return Utilities.selectTransform(node, k);
-                  case "input":
-                    return Utilities.inputTransform(node, k);
-                  case "textarea":
-                    return Utilities.textAreaTransform(node, k);
-                  default:
-                  break;
-                }
-                
-              }
-            })
-          )
-        }
-      </form>
-    );
-  }
-
   static selectTransform(node, k){
 
 /*
