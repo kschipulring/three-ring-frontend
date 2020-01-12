@@ -200,14 +200,11 @@ class App extends React.Component {
                             case "a":
                               return Utilities.a2LinkTransform(node, k);
                             case "form":
-                              return <ReactiveForm {...node.attribs} k={k}
-                              children={node.children} />;
-
-                              //return Utilities.formTransform(node, k);
+                              return <ReactiveForm {...node.attribs} key={k}
+                              k={k} children={node.children} />;
                             default:
                             break;
                           }
-                          
                         }
                       }
                     })

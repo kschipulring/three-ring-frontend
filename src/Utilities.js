@@ -70,7 +70,7 @@ export default class Utilities {
     );
   }
 
-  static selectTransform(node, k){
+  static selectTransform(node, k, f=null){
 
 /*
 <select name="select-233"
@@ -90,7 +90,7 @@ aria-required="true" aria-invalid="false">
 
     console.log( node.children );
 
-    return <select className={attrs.className} name={attrs.name || ''} key={k} >
+    return <select className={attrs.className} key={k} {...attrs} >
     {
       node.children.map(
         (item, k2) => <option key={k2}>
@@ -103,26 +103,24 @@ aria-required="true" aria-invalid="false">
     </select>;
   }
 
-  static inputTransform(node, k){
-    let attrs = node.attribs;
+  static inputTransform(node, k, f=null){
+    let attrs = node.attribs;  console.log( {f} );
 
     attrs.className = attrs.class;
 
     delete attrs.class;
 
     return <input type={attrs.type} className={attrs.className}
-    name={attrs.name} key={k} />;
+    name={attrs.name} key={k} onChange={f} />;
   }
 
-  static textAreaTransform(node, k){
+  static textAreaTransform(node, k, f=null){
     let attrs = node.attribs;
 
     attrs.className = attrs.class;
 
     delete attrs.class;
 
-    return (
-      <textarea {...attrs} key={k}></textarea>
-    );
+    return ( <textarea {...attrs} key={k} onChange={f}></textarea> );
   }
 }
