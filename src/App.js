@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactHtmlParser, { convertNodeToElement } from 'react-html-parser';
+import ReactHtmlParser from 'react-html-parser';
 import {
   BrowserRouter as Router,
   Switch,

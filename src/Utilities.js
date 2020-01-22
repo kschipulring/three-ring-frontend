@@ -1,8 +1,5 @@
 import React from 'react';
 import { Link } from "react-router-dom";
-import { convertNodeToElement } from 'react-html-parser';
-
-import Config from './Config';
 
 export default class Utilities {
 
@@ -32,23 +29,6 @@ export default class Utilities {
     }
   }
 
-  static handleSubmit(event, value) {
-    if (value) {
-      //setList(list.concat(value));
-
-      console.log( {value} );
-    }
-    /*setValue('');*/
-    console.log( event.target.value );
-
-    event.preventDefault();
-  }
-
-  static handleChange(event){
-    return true;
-  }
-
-
   /**
    * Transforms a standard 'a' tag into a react router 'Link' element. This is 
    * really only necessary for a tag elements from CMS Ajax source, as other 
@@ -68,59 +48,5 @@ export default class Utilities {
         }
       </Link>
     );
-  }
-
-  static selectTransform(node, k, f=null){
-
-/*
-<select name="select-233"
-class="wpcf7-form-control wpcf7-select wpcf7-validates-as-required"
-aria-required="true" aria-invalid="false">
-  <option value="General Inquiry">General Inquiry</option>
-  <option value="Request A Quote">Request A Quote</option>
-</select>
-
-*/
-
-    let attrs = node.attribs;
-
-    attrs.className = attrs.class;
-
-    delete attrs.class;
-
-    console.log( node.children );
-
-    return <select className={attrs.className} key={k} {...attrs} >
-    {
-      node.children.map(
-        (item, k2) => <option key={k2}>
-        {
-          item.data || item.children.map( i => i.data || "" )
-        }
-        </option>
-      )
-    }
-    </select>;
-  }
-
-  static inputTransform(node, k, f=null){
-    let attrs = node.attribs;  console.log( {f} );
-
-    attrs.className = attrs.class;
-
-    delete attrs.class;
-
-    return <input type={attrs.type} className={attrs.className}
-    name={attrs.name} key={k} onChange={f} />;
-  }
-
-  static textAreaTransform(node, k, f=null){
-    let attrs = node.attribs;
-
-    attrs.className = attrs.class;
-
-    delete attrs.class;
-
-    return ( <textarea {...attrs} key={k} onChange={f}></textarea> );
   }
 }
