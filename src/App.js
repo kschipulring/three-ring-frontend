@@ -12,7 +12,7 @@ import Config from './Config';
 import Utilities from './Utilities';
 import NavBar from './NavBar';
 
-import ReactiveForm from './ReactiveForm';
+import ReactiveForm from './ReactiveForm/index';
 
 import './App.scss';
 
