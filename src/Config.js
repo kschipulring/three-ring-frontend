@@ -1,8 +1,8 @@
 export default class Config{
-  static base_url = "http://3ringprototype.com";
-  static blog_url = `${this.base_url}/blog`;
-  static base_api_url = `${this.blog_url}/wp-json`;
+  static base_url = process.env.REACT_APP_BASE_URL;
+  static blog_url = process.env.REACT_APP_BLOG_URL;
+  static base_api_url = process.env.REACT_APP_BASE_API_URL;
 
-  static ep_nav = "/menus/v1/menus/test-nav-1";
-  static ep_pages = "/wp/v2/pages?order=asc&_embed&orderby=include&include=";
+  static ep_nav = process.env.REACT_APP_EP_NAV;
+  static ep_pages = process.env.REACT_APP_EP_PAGES;
 }
