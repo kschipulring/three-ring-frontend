@@ -1,7 +1,6 @@
 import React from 'react';
 
 import Config from './Config';
-import Utilities from './Utilities';
 import ReCAPTCHA from "react-google-recaptcha";
 
 import { convertNodeToElement } from 'react-html-parser';
@@ -21,17 +20,85 @@ class ReactiveForm extends React.Component {
     };
 
     this.handleChange = this.handleChange.bind(this);
-
     this.recapHandleChange = this.recapHandleChange.bind(this);
-
     this.handleSubmit = this.handleSubmit.bind(this);
+
+    this.action = "";
+  }
+
+  static selectTransform(node, k, f=null){
+    let attrs = node.attribs;
+
+    attrs.className = attrs.class;
+
+    delete attrs.class;
+
+    console.log( node.children );
+
+    return <select className={attrs.className} key={k} {...attrs} onChange={f} >
+    {
+      node.children.map(
+        (item, k2) => <option key={k2}>
+        {
+          item.data || item.children.map( i => i.data || "" )
+        }
+        </option>
+      )
+    }
+    </select>;
+  }
+
+  static inputTransform(node, k, f=null){
+    let attrs = node.attribs;  console.log( {f} );
+
+    attrs.className = attrs.class;
+
+    delete attrs.class;
+
+    return <input type={attrs.type} className={attrs.className}
+    name={attrs.name} key={k} onChange={f} />;
+  }
+
+  static textAreaTransform(node, k, f=null){
+    let attrs = node.attribs;
+
+    attrs.className = attrs.class;
+
+    delete attrs.class;
+
+    return ( <textarea {...attrs} key={k} onChange={f}></textarea> );
   }
 
   handleSubmit(event, value) {
-
-    console.log( this.model );
-
     event.preventDefault();
+
+    let values = this.model;
+
+    //just in case this form uses Recaptcha...
+    values["g-recaptcha-response"] = values.recaptchaValue || "";
+
+    var endpoint = this.action;
+
+    //if this is a Contact Form 7 form...
+    if( this.action.includes("#wpcf7") ){
+      let fid = this.action.replace(/(.)*#wpcf7-f|-o(\w)+/g, "");
+
+      endpoint = Config.base_api_url + 
+      `/contact-form-7/v1/contact-forms/${fid}/feedback`;
+    }
+
+    var request = new XMLHttpRequest();
+    // POST to httpbin which returns the POST data as JSON
+    request.open('POST', endpoint, /* async = */ true);
+
+    var formData = new FormData();
+
+    for( let i in values ){
+      formData.append(i, values[i] );
+    }
+
+    request.send(formData);
+    console.log(request.response);
   }
 
   handleChange(event){
@@ -44,6 +111,7 @@ class ReactiveForm extends React.Component {
     console.log( this.model );
   }
 
+  //only for when a recaptcha instance changes.
   recapHandleChange(value){
     this.model.recaptchaUsed = true;
     this.model.recaptchaValue = value;
@@ -51,6 +119,8 @@ class ReactiveForm extends React.Component {
 
   render(){
     let {props} = this;
+
+    this.action = props.action;
 
     return <form action={props.action} className={props.class || "" }
     id={props.id || ""} encType={props.enctype || ""} k={props.k} 
@@ -63,11 +133,11 @@ class ReactiveForm extends React.Component {
 
             switch(node.name) {
               case "select":
-                return Utilities.selectTransform(node, k, this.handleChange);
+                return ReactiveForm.selectTransform(node, k, this.handleChange);
               case "input":
-                return Utilities.inputTransform(node, k, this.handleChange);
+                return ReactiveForm.inputTransform(node, k, this.handleChange);
               case "textarea":
-                return Utilities.textAreaTransform(node, k, this.handleChange);
+                return ReactiveForm.textAreaTransform(node, k, this.handleChange);
               case "div":
 
                 let retval = "";
