@@ -9,6 +9,8 @@ import InputTransform from './InputTransform';
 import TextAreaTransform from './TextAreaTransform';
 import SelectTransform from './SelectTransform';
 
+import Modal from 'react-modal';
+
 const TEST_SITE_KEY = "6Le5-T4UAAAAAL09DMkA6dffu36NsuFwg2a-Q5WC";
 
 class ReactiveForm extends React.Component {
@@ -19,11 +21,23 @@ class ReactiveForm extends React.Component {
       recaptchaUsed: false
     };
 
-    this.handleChange = this.handleChange.bind(this);
-    this.recapHandleChange = this.recapHandleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    // This binding is necessary to make `this` work in the callback
+    var barr = ['handleChange', 'recapHandleChange', 'handleSubmit', 'handleOpenModal', 'handleCloseModal'];
+
+    //yes, karl is lazy, yet obsessed with efficiency
+    for(let i in barr){
+      this[barr[i]] = this[barr[i]].bind(this);
+    }
 
     this.action = "";
+  }
+
+  handleOpenModal() {
+    this.stateUpdate({showModal: true});
+  }
+  
+  handleCloseModal() {
+    this.stateUpdate({showModal: false});
   }
 
   handleSubmit(event, value) {

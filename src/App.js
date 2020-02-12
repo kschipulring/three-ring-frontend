@@ -1,4 +1,9 @@
 import React from 'react';
+//import ReactDOM from 'react-dom';
+import Modal from 'react-modal';
+
+//import $ from 'jQuery';
+
 import ReactHtmlParser from 'react-html-parser';
 import {
   BrowserRouter as Router,
