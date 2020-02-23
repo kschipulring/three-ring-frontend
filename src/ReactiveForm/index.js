@@ -88,44 +88,49 @@ class ReactiveForm extends React.Component {
     this.model.recaptchaValue = value;
   }
 
+  renderIfTag(node, k){
+    if (node.type === 'tag' ) {
+
+      switch(node.name) {
+        case "select":
+          return SelectTransform(node, k, this.handleChange);
+        case "input":
+          return InputTransform(node, k, this.handleChange);
+        case "textarea":
+          return TextAreaTransform(node, k, this.handleChange);
+        case "div":
+
+          let retval = "";
+
+          if( node.attribs.class === "wpcf7-form-control-wrap" ){
+            retval = <ReCAPTCHA style={{ display: "inline-block" }}
+              sitekey={TEST_SITE_KEY} key={k}
+              onChange={this.recapHandleChange} />;
+          }else{
+            retval = convertNodeToElement(node, k);
+          }
+
+          return retval;
+        default:
+        break;
+      }
+    }
+  };
+
   render(){
     let {props} = this;
 
     this.action = props.action;
 
+    Modal.setAppElement('#root');
+
     return <form action={props.action} className={props.class || "" }
     id={props.id || ""} encType={props.enctype || ""} k={props.k} 
     onSubmit={this.handleSubmit}>
     {
-
       props.children.map(
         (item, k) => convertNodeToElement(item, k, (node, k) => {
-          if (node.type === 'tag' ) {
-
-            switch(node.name) {
-              case "select":
-                return SelectTransform(node, k, this.handleChange);
-              case "input":
-                return InputTransform(node, k, this.handleChange);
-              case "textarea":
-                return TextAreaTransform(node, k, this.handleChange);
-              case "div":
-
-                let retval = "";
-
-                if( node.attribs.class === "wpcf7-form-control-wrap" ){
-                  retval = <ReCAPTCHA style={{ display: "inline-block" }}
-                    sitekey={TEST_SITE_KEY} key={k}
-                    onChange={this.recapHandleChange} />;
-                }else{
-                  retval = convertNodeToElement(node, k);
-                }
-
-                return retval;
-              default:
-              break;
-            }
-          }
+          return this.renderIfTag(node, k);
         })
       )
     }
