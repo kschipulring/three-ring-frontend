@@ -24,6 +24,12 @@ import './App.scss';
 class App extends React.Component {
   static current_page = "";
 
+  stateUpdate(prop){
+    let new_state = { ...this.state, ...prop };
+    
+    this.setState(new_state);
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -31,12 +37,19 @@ class App extends React.Component {
       isLoaded: false,
       items: [],
       page_ids_str: "",
-      menu_active: false
+      menu_active: false,
+      showModal: false
     };
+
+    //
+    this.subtitle = null;
 
     // This binding is necessary to make `this` work in the callback
     this.showMenu = this.showMenu.bind(this);
   }
+
+    //Modal.setAppElement('#root');
+  
 
   /**
    * Universal middleware function for AJAX functions.
@@ -59,12 +72,7 @@ class App extends React.Component {
       exceptions from actual bugs in components.
       */
       (error) => {
-        let new_state = this.state;
-
-        new_state.isLoaded = true;
-        new_state.error = error;
-        
-        this.setState( new_state );
+        this.stateUpdate({isLoaded: true, error});
       }
     );
   }
@@ -83,16 +91,8 @@ class App extends React.Component {
       //flatten the array into a one dimensional array with 2 steps.
       let page_ids_str = page_id_arr.join();
 
-      //to update the core state.
-      let new_state = this.state;
-
-      //attach the ids list to the state
-      new_state.page_ids_str = page_ids_str;
-
-      //get the nav items to the state
-      new_state.nav_items = result.items;
-
-      this.setState( new_state );
+      //attach the ids list and the nav items to the state 
+      this.stateUpdate({page_ids_str, nav_items: result.items});
     });
 
     /*
@@ -102,15 +102,8 @@ class App extends React.Component {
     menu_fetch.then(() => {
       let pages_ep = `${Config.ep_pages}${this.state.page_ids_str}`;
 
-      this.ajaxLoadThen(pages_ep, (result) => {
-        //console.log( "the result of pages = ", result );
-
-        let new_state = this.state;
-
-        new_state.isLoaded = true;
-        new_state.items = result;
-
-        this.setState( new_state );
+      this.ajaxLoadThen(pages_ep, (items) => {
+        this.stateUpdate({isLoaded: true, items});
       });
     });
   }
@@ -122,11 +115,7 @@ class App extends React.Component {
    */
   showMenu(){
     //base the menu visibility on the state property
-    let new_state = this.state;
-
-    new_state.menu_active = !this.state.menu_active;
-
-    this.setState(new_state);
+    this.stateUpdate({menu_active: !this.state.menu_active});
   }
 
   /**
@@ -151,6 +140,81 @@ class App extends React.Component {
     params.ready();
 
     return "";
+  }
+
+
+  pageScrollTo(){
+    let element = document.getElementById( App.current_page );
+  
+    //scroll to the particular section of the page.
+    if( element ){
+      element.scrollIntoView({behavior: 'smooth'});
+    }
+  }
+
+  componentDidUpdate(){
+    console.log( "component did update test" );
+
+    this.pageScrollTo();
+  }
+
+  /**
+   * To take an array of raw HTML items and return a filtered array of HTML items that works with React.
+   * @param {array} items - the array of page items. Each item is in HTML format.
+   * @return {array} - filtered array of page items.
+   */
+  pageItems(items){
+    return items.map( (item) => {
+
+      let img_url = item._embedded['wp:featuredmedia'] ?
+        item._embedded['wp:featuredmedia'][0].source_url : "";
+
+      let img_tag = img_url ?
+      <img src={img_url} className="header-img"
+      alt={item._embedded['wp:featuredmedia'][0].slug} /> : "";
+
+      item.content.rendered = item.content.rendered.replace( "<h7", "<h6" );
+
+      return (
+        <article key={item.id} id={item.link.replace(Config.blog_url, "")}>
+          { img_tag }
+
+          <h2>{ Utilities.decodeEntities(item.title.rendered) }</h2>
+
+          {
+            ReactHtmlParser( item.content.rendered, {
+              transform: (node, k) => {
+                return this.renderIfTag(node, k);
+              }
+            })
+          }
+        </article>
+      )
+    })
+  }
+
+  /**
+   * handle for when an HTML item is an 'a' tag or a form tag.
+   * @param {HTMLElement} node 
+   * @param {number} k - for a unique element key.  React complains otherwise.
+   * @return {HTMLElement} - post filtering
+   */
+  renderIfTag(node, k){
+    if (node.type === 'tag' ) {
+      switch(node.name) {
+        case "a":
+          return Utilities.a2LinkTransform(node, k);
+        case "form":
+          let attribs = node.attribs;
+
+          console.log( {attribs} );
+
+          return <ReactiveForm {...node.attribs} key={k}
+          k={k} children={node.children} />;
+        default:
+        break;
+      }
+    }
   }
 
   render() {
@@ -183,60 +247,19 @@ class App extends React.Component {
 
             <NavBar id="main_nav" items={nav_items} navClassName={navClassName} />
 
-            {items.map( (item) => {
+            <button onClick={this.handleOpenModal}>Trigger Modal</button>
+            <Modal 
+              isOpen={this.state.showModal}
+              contentLabel="Minimal Modal Example"
+            >
+              <button onClick={this.handleCloseModal}>Close Modal</button>
+            </Modal>
 
-              let img_url = item._embedded['wp:featuredmedia'] ?
-                item._embedded['wp:featuredmedia'][0].source_url : "";
-
-              let img_tag = img_url ?
-              <img src={img_url} className="header-img"
-              alt={item._embedded['wp:featuredmedia'][0].slug} /> : "";
-
-              return (
-                <article key={item.id} id={item.link.replace(Config.blog_url, "")}>
-                  { img_tag }
-
-                  <h2>{ Utilities.decodeEntities(item.title.rendered) }</h2>
-                  {
-                    ReactHtmlParser( item.content.rendered, {
-                      transform: (node, k) => {
-                        if (node.type === 'tag' ) {
-                          switch(node.name) {
-                            case "a":
-                              return Utilities.a2LinkTransform(node, k);
-                            case "form":
-                              return <ReactiveForm {...node.attribs} key={k}
-                              k={k} children={node.children} />;
-                            default:
-                            break;
-                          }
-                        }
-                      }
-                    })
-                  }
-                </article>
-              )
-            }
-            )}
+            {this.pageItems(items)}
           </Router>
         </main>
       );
     }
-  }
-
-  pageScrollTo(){
-    let element = document.getElementById( App.current_page );
-  
-    //scroll to the particular section of the page.
-    if( element ){
-      element.scrollIntoView({behavior: 'smooth'});
-    }
-  }
-
-  componentDidUpdate(){
-    console.log( "component did update test" );
-
-    this.pageScrollTo();
   }
 }
 
