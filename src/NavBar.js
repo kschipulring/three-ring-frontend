@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import Config from './Config';
 import Utilities from './Utilities';
 
-class NavBar extends React.Component {
+export default class NavBar extends React.Component {
   /**
    * Returns an individual navigation item in jsx html from a nav item object.
    * @param {object} item - navigation item source object.
@@ -50,5 +50,3 @@ class NavBar extends React.Component {
     </nav>;
   }
 }
-
-export default NavBar;
