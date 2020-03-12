@@ -32,6 +32,12 @@ class ReactiveForm extends React.Component {
     this.action = "";
   }
 
+  stateUpdate(prop){
+    let new_state = { ...this.state, ...prop };
+    
+    this.setState(new_state);
+  }
+
   handleOpenModal() {
     this.stateUpdate({showModal: true});
   }
