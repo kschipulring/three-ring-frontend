@@ -17,6 +17,8 @@ class ReactiveForm extends React.Component {
   constructor(props) {
     super(props);
 
+    this.onSubmitModal = props.onSubmitModal;
+
     this.model = {
       recaptchaUsed: false
     };
@@ -76,6 +78,8 @@ class ReactiveForm extends React.Component {
 
     request.send(formData);
     console.log(request.response);
+
+    this.onSubmitModal();
   }
 
   handleChange(event){

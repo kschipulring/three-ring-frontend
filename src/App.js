@@ -2,8 +2,6 @@ import React from 'react';
 //import ReactDOM from 'react-dom';
 import Modal from 'react-modal';
 
-//import $ from 'jQuery';
-
 import ReactHtmlParser from 'react-html-parser';
 import {
   BrowserRouter as Router,
@@ -45,11 +43,12 @@ class App extends React.Component {
     this.subtitle = null;
 
     // This binding is necessary to make `this` work in the callback
-    this.showMenu = this.showMenu.bind(this);
-  }
+    var bind_arr = ["showMenu", "handleCloseModal", "handleOpenModal"];
 
-    //Modal.setAppElement('#root');
-  
+    for( let i in bind_arr ){
+      this[ bind_arr[i]] = this[ bind_arr[i]].bind(this);
+    }
+  }
 
   /**
    * Universal middleware function for AJAX functions.
@@ -142,6 +141,13 @@ class App extends React.Component {
     return "";
   }
 
+  handleOpenModal() {
+    this.stateUpdate({showModal: true});
+  }
+  
+  handleCloseModal() {
+    this.stateUpdate({showModal: false});
+  }
 
   pageScrollTo(){
     let element = document.getElementById( App.current_page );
@@ -193,6 +199,11 @@ class App extends React.Component {
     })
   }
 
+  //TODO
+  onSubmitModal(){
+    console.log("test submit ");
+  }
+
   /**
    * handle for when an HTML item is an 'a' tag or a form tag.
    * @param {HTMLElement} node 
@@ -209,7 +220,7 @@ class App extends React.Component {
 
           console.log( {attribs} );
 
-          return <ReactiveForm {...node.attribs} key={k}
+          return <ReactiveForm {...node.attribs} key={k} onSubmitModal={this.handleOpenModal}
           k={k} children={node.children} />;
         default:
         break;
@@ -251,8 +262,29 @@ class App extends React.Component {
             <Modal 
               isOpen={this.state.showModal}
               contentLabel="Minimal Modal Example"
+              className="Modal"
+              overlayClassName="Overlay"
             >
-              <button onClick={this.handleCloseModal}>Close Modal</button>
+              <div className="modal-content">
+                <div className="modal-header">
+                  <button type="button" className="close" data-dismiss="modal" 
+                    aria-label="Close" onClick={this.handleCloseModal}>
+                    <span aria-hidden="true">×</span>
+                  </button>
+                </div>
+                <div className="modal-body">
+                  <h2 className="modal-title">
+                    Thanks for <br/>getting in touch.
+                  </h2>
+                  <p>We shall reply to you shortly.</p>
+                </div>
+                <div className="modal-footer">
+                  <button type="button" className="btn btn-primary"
+                    data-dismiss="modal" onClick={this.handleCloseModal}>
+                    Got it
+                  </button>
+                </div>
+              </div>
             </Modal>
 
             {this.pageItems(items)}
