@@ -273,6 +273,10 @@ class App extends React.Component {
                   </button>
                 </div>
                 <div className="modal-body">
+                  <img alt="Three Ring Design" class="modal-logo"
+                    src="http://threering-media.s3.amazonaws.com/blog/wp-content/uploads/2019/12/02234111/three_ring_logo.svg"
+                    />
+                  <br/>
                   <h2 className="modal-title">
                     Thanks for <br/>getting in touch.
                   </h2>

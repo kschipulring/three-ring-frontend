@@ -129,7 +129,7 @@ article {
     font-size: 16pt;
   }
 
-  .wp-block-button__link, & .wpforms-submit{
+  .wp-block-button__link, & .wpforms-submit, & .wpcf7-form-control.wpcf7-submit{
     background-color: #9c0d0d;
     width: 272px;
     height: 48px;
@@ -142,6 +142,16 @@ article {
     font-size: 30px;
     font-family: calibri;
     padding-top: 9px;
+
+    &:hover{
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
+
+  & .wpcf7-form-control.wpcf7-submit{
+    height: 57px;
+    border: none;
   }
 
   form button{
@@ -241,7 +251,7 @@ $modal-overlay-bg: #EEEEEEAA;
   min-width: 320px;
   min-height: 450px;
   width: 60%;
-  height: 50%;
+  height: 65%;
   max-width: 700px;
   border-radius: 4px;
 
@@ -283,6 +293,12 @@ $modal-overlay-bg: #EEEEEEAA;
     text-align: center;
     font-size: 24px;
     font-weight: normal;
+
+    .modal-logo{
+      height: 7em;
+      width: auto;
+      filter: invert(1);
+    }
     
     p {
       font-size: 36px;
