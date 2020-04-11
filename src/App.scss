@@ -147,6 +147,15 @@ article {
       text-decoration: underline;
       cursor: pointer;
     }
+
+    &:disabled, &[disabled]{
+      opacity: 0.5;
+
+      &:hover{
+        text-decoration: none;
+        cursor: not-allowed;
+      }
+    }
   }
 
   & .wpcf7-form-control.wpcf7-submit{
@@ -232,6 +241,11 @@ article {
     padding: 9pt;
     margin-bottom: 14pt;
     border: #CCC thin solid;
+
+    &:invalid {
+      background-color: pink;
+      border-color:red;
+    }
   }
 
   select{
