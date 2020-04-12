@@ -5,4 +5,7 @@ export default class Config{
 
   static ep_nav = process.env.REACT_APP_EP_NAV;
   static ep_pages = process.env.REACT_APP_EP_PAGES;
+
+  static cloud_base_url = process.env.REACT_APP_CLOUD_BASE_URL;
+  static cloud_uploads_url = process.env.REACT_APP_CLOUD_UPLOADS_URL;
 }

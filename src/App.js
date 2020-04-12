@@ -274,7 +274,7 @@ class App extends React.Component {
                 </div>
                 <div className="modal-body">
                   <img alt="Three Ring Design" class="modal-logo"
-                    src="http://threering-media.s3.amazonaws.com/blog/wp-content/uploads/2019/12/02234111/three_ring_logo.svg"
+                    src={Config.cloud_uploads_url + "2019/12/02234111/three_ring_logo.svg"}
                     />
                   <br/>
                   <h2 className="modal-title">
