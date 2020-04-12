@@ -11,8 +11,7 @@ function InputTransform(node, k, f=null){
 
   delete attrs.class;
 
-  return <input type={attrs.type} className={attrs.className} title={if_title}
-  name={attrs.name} key={k} onChange={f} disabled={if_disabled} />;
+  return <input {...attrs} key={k} onChange={f} title={if_title} disabled={if_disabled} />
 }
 
 export default InputTransform;
