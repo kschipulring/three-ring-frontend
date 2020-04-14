@@ -23,8 +23,14 @@ class ReactiveForm extends React.Component {
       recaptchaUsed: false
     };
 
+    this.fields_valid = false;
+
+    this.state = {
+      form_valid: false
+    };
+
     // This binding is necessary to make `this` work in the callback
-    var barr = ['handleChange', 'recapHandleChange', 'handleSubmit', 'handleOpenModal', 'handleCloseModal'];
+    var barr = ['handleChange', 'recapHandleChange', 'handleSubmit'];
 
     //yes, karl is lazy, yet obsessed with efficiency
     for(let i in barr){
@@ -32,20 +38,6 @@ class ReactiveForm extends React.Component {
     }
 
     this.action = "";
-  }
-
-  stateUpdate(prop){
-    let new_state = { ...this.state, ...prop };
-    
-    this.setState(new_state);
-  }
-
-  handleOpenModal() {
-    this.stateUpdate({showModal: true});
-  }
-  
-  handleCloseModal() {
-    this.stateUpdate({showModal: false});
   }
 
   handleSubmit(event, value) {
