@@ -1,17 +1,21 @@
 import React from 'react';
 
-function InputTransform(node, k, f=null){
-  let attrs = node.attribs;  console.log( {f} );
+function InputTransform({attribs, k, f}){
+  //for a phone field to be valid, it must have the following pattern.
+  attribs.pattern = attribs.type === "tel" ?
+    "[0-9]{3} ?[0-9]{3} ?[0-9]{4}" : null;
 
-  //we want the submit button to be disabled by default.  Avoids spammy stuff.
-  let if_disabled = (attrs.type === "submit") && !(attrs.form_enabled);
-  let if_title = if_disabled ? "please complete the form" : "";
+  attribs.className = attribs.class;
+  
+  delete attribs.class;
+  delete attribs.value;
 
-  attrs.className = attrs.class;
+  attribs.required = attribs['aria-required'] ? true : false;
 
-  delete attrs.class;
+  attribs.k = k;
+  attribs.onChange = f;
 
-  return <input {...attrs} key={k} onChange={f} title={if_title} disabled={if_disabled} />
+  return (<input {...attribs} />);
 }
 
 export default InputTransform;
