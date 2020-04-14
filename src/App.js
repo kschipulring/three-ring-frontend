@@ -273,7 +273,7 @@ class App extends React.Component {
                   </button>
                 </div>
                 <div className="modal-body">
-                  <img alt="Three Ring Design" class="modal-logo"
+                  <img alt="Three Ring Design" className="modal-logo"
                     src={Config.cloud_uploads_url + "2019/12/02234111/three_ring_logo.svg"}
                     />
                   <br/>
