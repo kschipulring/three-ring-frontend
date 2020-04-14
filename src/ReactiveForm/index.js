@@ -138,6 +138,21 @@ class ReactiveForm extends React.Component {
     }
     </form>;
   }
+
+  //unfortunate hack for fields which somehow fall by the wayside when updating the component state.
+  componentDidUpdate(){
+    //which fields in the form are null? (but probably shouldn't be)
+    let null_vals = Object.entries(this.model).filter( e => e[1] === null );
+
+    //so now fix parts of the model (really, form fields) that should be populated.
+    for(let i in null_vals){
+      let j = null_vals[i][0];
+      let v = document.querySelector(`*[name='${j}']`) ?
+        document.querySelector(`*[name='${j}']`).value : null;
+
+      this.model[j] = v;
+    }
+  }
 }
 
 export default ReactiveForm;
