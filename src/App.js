@@ -258,7 +258,6 @@ class App extends React.Component {
 
             <NavBar id="main_nav" items={nav_items} navClassName={navClassName} />
 
-            <button onClick={this.handleOpenModal}>Trigger Modal</button>
             <Modal 
               isOpen={this.state.showModal}
               contentLabel="Minimal Modal Example"
