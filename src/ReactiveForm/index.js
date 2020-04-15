@@ -25,12 +25,16 @@ class ReactiveForm extends React.Component {
 
     this.fields_valid = false;
 
+    //a fallback for when the form element does not have an id
+    this.form_id = Math.random().toString(36).substring(2, 15) 
+      + Math.random().toString(36).substring(2, 15);;
+
     this.state = {
       form_valid: false
     };
 
     // This binding is necessary to make `this` work in the callback
-    var barr = ['handleChange', 'recapHandleChange', 'handleSubmit'];
+    var barr = ['handleChange', 'recapHandleChange', 'handleSubmit', 'resetForm'];
 
     //yes, karl is lazy, yet obsessed with efficiency
     for(let i in barr){
@@ -45,9 +49,7 @@ class ReactiveForm extends React.Component {
 
     let values = this.model;
 
-    //just in case this form uses Recaptcha...
-    values["g-recaptcha-response"] = values.recaptchaValue || "";
-
+    //where form gets submitted to.
     var endpoint = this.action;
 
     //if this is a Contact Form 7 form...
@@ -59,9 +61,23 @@ class ReactiveForm extends React.Component {
       `/contact-form-7/v1/contact-forms/${fid}/feedback`;
     }
 
-    var request = new XMLHttpRequest();
+    var XHR = new XMLHttpRequest();
     // POST to httpbin which returns the POST data as JSON
-    request.open('POST', endpoint, /* async = */ true);
+    XHR.open('POST', endpoint, /* async = */ true);
+
+    XHR.onload = () => {
+      console.log( {XHR} );
+
+      if (XHR.status >= 200 && XHR.status < 400) {
+        //happy message for successful form submitters
+        this.onSubmitModal();
+
+        //standard javascript form reset.
+        document.querySelector("#"+this.form_id).reset();
+
+        console.log( "XHR.responseText = ", XHR.responseText );
+      } 
+    };
 
     var formData = new FormData();
 
@@ -69,10 +85,8 @@ class ReactiveForm extends React.Component {
       formData.append(i, values[i] );
     }
 
-    request.send(formData);
-    console.log(request.response);
-
-    this.onSubmitModal();
+    //send the form data.
+    XHR.send(formData);
   }
 
   /* only covers changes of main form elements, not recaptcha... 'target' is the
@@ -84,8 +98,12 @@ class ReactiveForm extends React.Component {
     //used by the submission function
     this.model[name] = value;
 
+    this.areFieldsValid(target.form);
+  }
+
+  areFieldsValid(form){
     //which of these form elements are required?
-    let tfe = [...target.form.elements].filter(e => e.required);
+    let tfe = [...form.elements].filter(e => e.required);
 
     //which of the filtered form elements from above that are required are also valid.
     let tfev = tfe.filter(e => e.validity.valid);
@@ -105,7 +123,7 @@ class ReactiveForm extends React.Component {
     this.model.recaptchaUsed = value ? true : false;
 
     //what comes from the Google Recaptcha service.
-    this.model.recaptchaValue = value;
+    this.model["g-recaptcha-response"] = value;
 
     this.formReadyToSubmit();
   }
@@ -158,7 +176,23 @@ class ReactiveForm extends React.Component {
         break;
       }
     }
-  };
+  }
+
+  /*
+  created for every possible type of reset for this form, whether internal or
+  external.
+  */
+  resetForm(){
+    //reset the model property to as if the form were untouched.
+    Object.entries(this.model).forEach(([key, value]) => {
+      this.model[key] = (key.includes("ecaptcha") ) ? false : null;
+    });
+
+    //but some of the fields, like select boxes, will still have their own native values.
+    this.defaultValsToModel();
+
+    this.setState({form_valid: false});
+  }
 
   render(){
     let {props} = this;
@@ -167,9 +201,11 @@ class ReactiveForm extends React.Component {
 
     Modal.setAppElement('#root');
 
+    this.form_id = props.id || this.form_id;
+
     return <form action={props.action} className={props.class || ""}
-    id={props.id || ""} encType={props.enctype || ""} k={props.k} 
-    onSubmit={this.handleSubmit}>
+      id={this.form_id} name={props.name || ""} encType={props.enctype || ""}
+      k={props.k} onSubmit={this.handleSubmit} onReset={this.resetForm}>
     {
       props.children.map(
         (item, k) => convertNodeToElement(item, k, (node, k) => {
@@ -181,7 +217,7 @@ class ReactiveForm extends React.Component {
   }
 
   //unfortunate hack for fields which somehow fall by the wayside when updating the component state.
-  componentDidUpdate(){
+  defaultValsToModel(){
     //which fields in the form are null? (but probably shouldn't be)
     let null_vals = Object.entries(this.model).filter( e => e[1] === null );
 
@@ -193,6 +229,10 @@ class ReactiveForm extends React.Component {
 
       this.model[j] = v;
     }
+  }
+
+  componentDidUpdate(){
+    this.defaultValsToModel();
   }
 }
 
