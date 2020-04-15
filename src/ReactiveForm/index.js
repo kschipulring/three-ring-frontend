@@ -75,10 +75,9 @@ class ReactiveForm extends React.Component {
     this.onSubmitModal();
   }
 
-  //only covers changes of main form elements, not recaptcha...
-  handleChange(event){
-    //the html element that just got changed.
-    const target = event.target;
+  /* only covers changes of main form elements, not recaptcha... 'target' is the
+   html element that just got changed. */
+  handleChange({target}){
     const name = target.name;
     const value = target.type === 'checkbox' ? target.checked : target.value;
 
@@ -102,7 +101,10 @@ class ReactiveForm extends React.Component {
 
   //only for when a recaptcha instance changes.
   recapHandleChange(value){
+    //...second of two approvals for the form to be officially ready to submit.
     this.model.recaptchaUsed = value ? true : false;
+
+    //what comes from the Google Recaptcha service.
     this.model.recaptchaValue = value;
 
     this.formReadyToSubmit();
@@ -112,8 +114,7 @@ class ReactiveForm extends React.Component {
   formReadyToSubmit(){
     const form_valid = this.fields_valid && this.model.recaptchaUsed;
 
-    console.log( {'model': this.model, form_valid} );
-
+    //'true' means that the form is submittable, 'false' means it is not.
     this.setState( {form_valid} );
   }
 
