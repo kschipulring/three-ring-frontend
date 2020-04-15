@@ -54,6 +54,7 @@ class ReactiveForm extends React.Component {
     if( this.action.includes("#wpcf7") ){
       let fid = this.action.replace(/(.)*#wpcf7-f|-o(\w)+/g, "");
 
+      //this changes the action URL to that which works from the WP Rest API.
       endpoint = Config.base_api_url + 
       `/contact-form-7/v1/contact-forms/${fid}/feedback`;
     }
@@ -74,40 +75,79 @@ class ReactiveForm extends React.Component {
     this.onSubmitModal();
   }
 
+  //only covers changes of main form elements, not recaptcha...
   handleChange(event){
+    //the html element that just got changed.
     const target = event.target;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
     const name = target.name;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
 
+    //used by the submission function
     this.model[name] = value;
 
-    console.log( this.model );
+    //which of these form elements are required?
+    let tfe = [...target.form.elements].filter(e => e.required);
+
+    //which of the filtered form elements from above that are required are also valid.
+    let tfev = tfe.filter(e => e.validity.valid);
+
+    //are all required fields valid?
+    let teq = ( tfe.length === tfev.length );
+
+    //This will be one of two approvals for the form to be officially ready to submit.
+    this.fields_valid = teq;
+
+    this.formReadyToSubmit();
   }
 
   //only for when a recaptcha instance changes.
   recapHandleChange(value){
-    this.model.recaptchaUsed = true;
+    this.model.recaptchaUsed = value ? true : false;
     this.model.recaptchaValue = value;
+
+    this.formReadyToSubmit();
   }
 
+  //this determines whether this form is valid so that it can be submitted.
+  formReadyToSubmit(){
+    const form_valid = this.fields_valid && this.model.recaptchaUsed;
+
+    console.log( {'model': this.model, form_valid} );
+
+    this.setState( {form_valid} );
+  }
+
+  //handles individual form fields within this form.
   renderIfTag(node, k){
     if (node.type === 'tag' ) {
 
       switch(node.name) {
         case "select":
-          return SelectTransform(node, k, this.handleChange);
-        case "input":
-          return InputTransform(node, k, this.handleChange);
-        case "textarea":
-          return TextAreaTransform(node, k, this.handleChange);
-        case "div":
+          /* starts out as null, because the 'node' object here does not have
+            the selected value of its select box, because it is not yet rendered
+            on the page. */
+          this.model[ node.attribs.name ] = null;
 
+          return <SelectTransform node={node} key={k} k={k} f={this.handleChange} />;
+        case "input":
+          if(node.attribs.type === "submit"){
+            return <input type="submit" disabled={!this.state.form_valid}
+              title={this.state.form_valid ? "" : "please complete the form"}
+              className={node.attribs.class} key={k}></input>;
+          }
+
+          return <InputTransform attribs={node.attribs} key={k} k={k} 
+            f={this.handleChange} />;
+        case "textarea":
+          return <TextAreaTransform attrs={node.attribs} key={k} k={k}
+            f={this.handleChange} />;
+        case "div":
           let retval = "";
 
           if( node.attribs.class === "wpcf7-form-control-wrap" ){
             retval = <ReCAPTCHA style={{ display: "inline-block" }}
-              sitekey={TEST_SITE_KEY} key={k}
-              onChange={this.recapHandleChange} />;
+              sitekey={TEST_SITE_KEY} key={k} onChange={this.recapHandleChange}
+              onExpired={this.recapHandleChange} />;
           }else{
             retval = convertNodeToElement(node, k);
           }
@@ -126,7 +166,7 @@ class ReactiveForm extends React.Component {
 
     Modal.setAppElement('#root');
 
-    return <form action={props.action} className={props.class || "" }
+    return <form action={props.action} className={props.class || ""}
     id={props.id || ""} encType={props.enctype || ""} k={props.k} 
     onSubmit={this.handleSubmit}>
     {
