@@ -1,6 +1,4 @@
 import React from 'react';
-//import ReactDOM from 'react-dom';
-import Modal from 'react-modal';
 
 import ReactHtmlParser from 'react-html-parser';
 import {
@@ -16,6 +14,7 @@ import Utilities from './Utilities';
 import NavBar from './NavBar';
 
 import ReactiveForm from './ReactiveForm/index';
+import ThreeRingModal from './ThreeRingModal';
 
 import './App.scss';
 
@@ -258,37 +257,8 @@ class App extends React.Component {
 
             <NavBar id="main_nav" items={nav_items} navClassName={navClassName} />
 
-            <Modal 
-              isOpen={this.state.showModal}
-              contentLabel="Minimal Modal Example"
-              className="Modal"
-              overlayClassName="Overlay"
-            >
-              <div className="modal-content">
-                <div className="modal-header">
-                  <button type="button" className="close" data-dismiss="modal" 
-                    aria-label="Close" onClick={this.handleCloseModal}>
-                    <span aria-hidden="true">×</span>
-                  </button>
-                </div>
-                <div className="modal-body">
-                  <img alt="Three Ring Design" className="modal-logo"
-                    src={Config.cloud_uploads_url + "2019/12/02234111/three_ring_logo.svg"}
-                    />
-                  <br/>
-                  <h2 className="modal-title">
-                    Thanks for <br/>getting in touch.
-                  </h2>
-                  <p>We shall reply to you shortly.</p>
-                </div>
-                <div className="modal-footer">
-                  <button type="button" className="btn btn-primary"
-                    data-dismiss="modal" onClick={this.handleCloseModal}>
-                    Got it
-                  </button>
-                </div>
-              </div>
-            </Modal>
+            <ThreeRingModal showModal={this.state.showModal}
+              handleCloseModal={this.handleCloseModal} />
 
             {this.pageItems(items)}
           </Router>
