@@ -34,16 +34,11 @@ class App extends React.Component {
       isLoaded: false,
       items: [],
       page_ids_str: "",
-      menu_active: false,
-      menu_dance: true,
       showModal: false
     };
 
-    //
-    this.subtitle = null;
-
     // This binding is necessary to make `this` work in the callback
-    var bind_arr = ["showMenu", "handleCloseModal", "handleOpenModal"];
+    var bind_arr = ["handleCloseModal", "handleOpenModal"];
 
     for( let i in bind_arr ){
       this[ bind_arr[i]] = this[ bind_arr[i]].bind(this);
@@ -57,7 +52,6 @@ class App extends React.Component {
    * @return {void}
    */
   ajaxLoadThen( ep, curry_func ){
-
     return fetch( Config.base_api_url + ep)
     .then(res => res.json())
     .then(
@@ -104,18 +98,6 @@ class App extends React.Component {
       this.ajaxLoadThen(pages_ep, (items) => {
         this.stateUpdate({isLoaded: true, items});
       });
-    });
-  }
-
-  /**
-   * Toggles the main top menu only. This works by changing that state attribute.
-   * @param {void}
-   * @return {void}
-   */
-  showMenu(){
-    //base the menu visibility on the state property
-    this.stateUpdate({
-      menu_active: !this.state.menu_active
     });
   }
 
@@ -233,8 +215,6 @@ class App extends React.Component {
     } else if (!isLoaded || items.length < 1) {
       return <div>Loading...</div>;
     } else {
-      var navClassName = this.state.menu_active ? "show" : "hide";
-
       return (
         <main>
           <Router>
@@ -247,13 +227,7 @@ class App extends React.Component {
               </Route>
             </Switch>
 
-            {/* supplment to the nav bar */}
-            <button onClick={this.showMenu} className="nav_expander">
-              <span className="default">_<br/>_<br/>_</span>
-              <span className="expanded {navClassName}">X</span>
-            </button>
-
-            <NavBar id="main_nav" items={nav_items} navClassName={navClassName} />
+            <NavBar id="main_nav" items={nav_items} />
 
             <ThreeRingModal showModal={this.state.showModal}
               handleCloseModal={this.handleCloseModal} />

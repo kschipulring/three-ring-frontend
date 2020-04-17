@@ -4,7 +4,31 @@ import { Link } from "react-router-dom";
 import Config from './Config';
 import Utilities from './Utilities';
 
+import ThreeRingHamburgerButton from './ThreeRingHamburgerButton';
+
 export default class NavBar extends React.Component {
+  constructor(props) {
+    super(props);
+    
+    this.state = {
+      menu_active: false
+    };
+
+    this.showMenu = this.showMenu.bind(this);
+  }
+
+  /**
+   * Toggles the main top menu only. This works by changing that state attribute.
+   * @param {void}
+   * @return {void}
+   */
+  showMenu(){  console.log( "renegade was a cool game" );
+    //base the menu visibility on the state property
+    this.setState({
+      menu_active: !this.state.menu_active
+    });
+  }
+
   /**
    * Returns an individual navigation item in jsx html from a nav item object.
    * @param {object} item - navigation item source object.
@@ -35,7 +59,9 @@ export default class NavBar extends React.Component {
   render(){
     var nav_render = "";
 
-    var { items: nav_items, id = "", navClassName = "" } = this.props;
+    var { items: nav_items, id = "" } = this.props;
+
+    var navClassName = this.state.menu_active ? "show" : "hide";
 
     var blog_url = Config.blog_url;
 
@@ -45,8 +71,11 @@ export default class NavBar extends React.Component {
       nav_render = nav_items.map( item => this.navItem( item, blog_url ) );
     }
 
-    return <nav id={id} className={navClassName}>
-      <ul> {nav_render} </ul>
-    </nav>;
+    return <>
+        <ThreeRingHamburgerButton showMenu={this.showMenu} />
+        <nav id={id} className={navClassName}>
+          <ul> {nav_render} </ul>
+        </nav>
+      </>;
   }
 }
