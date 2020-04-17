@@ -35,6 +35,7 @@ class App extends React.Component {
       items: [],
       page_ids_str: "",
       menu_active: false,
+      menu_dance: true,
       showModal: false
     };
 
@@ -113,7 +114,9 @@ class App extends React.Component {
    */
   showMenu(){
     //base the menu visibility on the state property
-    this.stateUpdate({menu_active: !this.state.menu_active});
+    this.stateUpdate({
+      menu_active: !this.state.menu_active
+    });
   }
 
   /**
@@ -158,13 +161,12 @@ class App extends React.Component {
   }
 
   componentDidUpdate(){
-    console.log( "component did update test" );
-
     this.pageScrollTo();
   }
 
   /**
-   * To take an array of raw HTML items and return a filtered array of HTML items that works with React.
+   * To take an array of raw HTML items and return a filtered array of HTML
+   *  items that works with React.
    * @param {array} items - the array of page items. Each item is in HTML format.
    * @return {array} - filtered array of page items.
    */
@@ -176,7 +178,7 @@ class App extends React.Component {
 
       let img_tag = img_url ?
       <img src={img_url} className="header-img"
-      alt={item._embedded['wp:featuredmedia'][0].slug} /> : "";
+        alt={item._embedded['wp:featuredmedia'][0].slug} /> : "";
 
       item.content.rendered = item.content.rendered.replace( "<h7", "<h6" );
 
@@ -189,18 +191,17 @@ class App extends React.Component {
           {
             ReactHtmlParser( item.content.rendered, {
               transform: (node, k) => {
-                return this.renderIfTag(node, k);
+                if( !["style", "script"].includes(node.name) ){
+                  return this.renderIfTag(node, k);
+                }else{
+                  return <br key={k} />; //a blank nothingburger instead of annoying style tag.
+                }
               }
             })
           }
         </article>
       )
     })
-  }
-
-  //TODO
-  onSubmitModal(){
-    console.log("test submit ");
   }
 
   /**
@@ -215,12 +216,8 @@ class App extends React.Component {
         case "a":
           return Utilities.a2LinkTransform(node, k);
         case "form":
-          let attribs = node.attribs;
-
-          console.log( {attribs} );
-
-          return <ReactiveForm {...node.attribs} key={k} onSubmitModal={this.handleOpenModal}
-          k={k} children={node.children} />;
+          return <ReactiveForm {...node.attribs} key={k} k={k}
+            onSubmitModal={this.handleOpenModal} children={node.children} />;
         default:
         break;
       }
@@ -250,6 +247,7 @@ class App extends React.Component {
               </Route>
             </Switch>
 
+            {/* supplment to the nav bar */}
             <button onClick={this.showMenu} className="nav_expander">
               <span className="default">_<br/>_<br/>_</span>
               <span className="expanded {navClassName}">X</span>
