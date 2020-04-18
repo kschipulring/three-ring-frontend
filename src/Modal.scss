@@ -1,0 +1,99 @@
+
+$modal-bg: #343434;
+$modal-overlay-bg: #EEEEEEAA;
+
+.Modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: $modal-bg;
+  min-width: 320px;
+  min-height: 450px;
+  width: 60%;
+  height: 65%;
+  max-width: 700px;
+  border-radius: 4px;
+
+  color: white;
+
+  button{
+    cursor:pointer;
+  }
+
+  .modal-header{
+    text-align: right;
+
+    button{
+      border: none;
+      background-color: transparent;
+      line-height: 43px;
+      height: 43px;
+
+      span{
+        color: #555;
+        font-weight: normal;
+        font-family: auto;
+        font-size:4em;
+
+        &:hover{
+          color:#AAA;
+        }
+      }
+    }
+  }
+
+  .modal-title{
+    font-size: 70px;
+    margin-top: 0px;
+    margin-bottom: 10px;
+  }
+
+  .modal-body{
+    text-align: center;
+    font-size: 24px;
+    font-weight: normal;
+
+    .modal-logo{
+      height: 7em;
+      width: auto;
+      filter: invert(1);
+    }
+    
+    p {
+      font-size: 36px;
+      color: #FFF9;
+    }
+  }
+
+  .modal-footer{
+    text-align:center;
+
+    button{
+      width: 176px;
+      height: 57px;
+      background-color: #eeeeee;
+      border:none;
+      font-size: 30px;
+      color: $modal-bg;
+      font-weight: bold;
+
+      &:hover {
+        background-color: white;
+        color: black;
+      }
+    }
+  }
+}
+
+.Overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: $modal-overlay-bg;
+  animation-name: example;
+  animation-duration: 1s;
+  z-index: 4;
+}

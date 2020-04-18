@@ -1,0 +1,33 @@
+section#pfhub_portfolio_portfolio_content_1 {
+  display: none;
+}
+
+ul#pfhub_portfolio_portfolio_popup_list_1{
+  li {
+    list-style: none;
+    font-size: 20pt;
+
+    div.heading-navigation{
+      display: none;
+    }
+
+    h3{
+      font-size: 32pt;
+    }
+
+    .description{
+      ul {
+        margin-bottom: 50px;
+
+        li {
+          list-style-type: "- ";
+        }
+      }
+    }
+
+    .button-block{
+      margin-bottom: 75px;
+    }
+  }
+}
+
