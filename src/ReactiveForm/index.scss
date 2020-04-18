@@ -41,7 +41,7 @@ form {
   }
 
   select, input, textarea{
-    font-size: 12pt;
+    font-size: 16pt;
     width: 80%;
     min-width: 200px;
     padding: 9pt;
@@ -56,7 +56,6 @@ form {
 
   select{
     width: calc(80% + 23px);
-    font-size: 20pt;
   }
 
   .wpcf7-form-control.wpcf7-submit{
