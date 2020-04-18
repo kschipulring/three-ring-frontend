@@ -1,0 +1,66 @@
+form {
+  fieldset {
+    border: none;
+
+    legend {
+      display: none;
+    }
+  }
+
+  button{
+    border:none;
+    height: 57px;
+    padding-top: 0px;
+    cursor: pointer;
+  
+    &:hover{
+      text-decoration: underline;
+    }
+  }
+
+  li{
+    list-style-type: none;
+    font-size: 20pt;
+  }
+
+  .wpcf7-form-control-wrap {
+    display: block;
+  }
+
+  label{
+    clear: both;
+    display: block;
+    font-weight: bold;
+    color: #444;
+    font-size: 14pt;
+    padding-bottom: 5px;
+
+    .wpforms-required-label{
+      color:#C00;
+    }
+  }
+
+  select, input, textarea{
+    font-size: 12pt;
+    width: 80%;
+    min-width: 200px;
+    padding: 9pt;
+    margin-bottom: 14pt;
+    border: #CCC thin solid;
+
+    &:invalid {
+      background-color: pink;
+      border-color:red;
+    }
+  }
+
+  select{
+    width: calc(80% + 23px);
+    font-size: 20pt;
+  }
+
+  .wpcf7-form-control.wpcf7-submit{
+    height: 57px;
+    border: none;
+  }
+}
