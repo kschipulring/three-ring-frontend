@@ -1,0 +1,129 @@
+$transition-setting-menu: height 1500ms 1500ms, opacity 1500ms 0ms;
+
+@mixin animation-setting-burger-expanded {
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+}
+
+button.nav_expander {
+  line-height: 10px;
+  padding: 0px 10px 20px 10px;
+  font-weight: bold;
+  font-size: 32px;
+  height: 46px;
+  cursor: pointer;
+  background-color:transparent;
+  border: none;
+
+  position: fixed;
+  right: 46px;
+  top: 30px;
+  z-index: 3;
+
+  span {
+    margin-top: -10px;
+    display: block;
+
+    div{
+      &.one{
+        transform: rotate(0deg) translate(0px, 0px);
+      }
+      &.two{
+        transform: scaleX(1) translate(0px);
+      }
+      &.three{
+        transform: rotate(0deg) translate(0px, 0px);
+      }
+    }
+  }
+
+  span.expanded {
+    animation-name: span_e_kf;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+
+    div{
+      &.one{
+        animation-name: one_kf;
+        animation-duration: 1s;
+        animation-fill-mode: forwards;
+      }
+      &.two{
+        animation-name: two_kf;
+        animation-duration: 2s;
+        animation-fill-mode: forwards;
+      }
+      &.three{
+        animation-name: three_kf;
+        animation-duration: 1s;
+        animation-fill-mode: forwards;
+      }
+    }
+  }
+}
+
+@keyframes span_e_kf {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(-90deg) translate(-15px, 0px); }
+}
+
+@keyframes one_kf {
+  0%   { transform: rotate(0deg) translate(0px, 0px); }
+  100% { transform: rotate(45deg) translate(15px, -5px); }
+}
+
+@keyframes two_kf {
+  0%   { transform: scaleX(1) translate(0px); }
+  100% { transform: scaleX(1.75) translate(-4px); }
+}
+
+@keyframes three_kf {
+  0%   { transform: rotate(0deg) translate(0px, 0px); }
+  100% { transform: rotate(-45deg) translate(-5px, -5px); }
+}
+
+
+
+nav#main_nav{
+  background-color: #C55;
+  width: 388px;
+  right: 46px;
+  position: fixed;
+  z-index: 2;
+
+  > ul {
+    padding-top: 31px;
+    padding-bottom: 31px;
+    padding-left: 20px;
+
+    transition: 1.5s;
+
+    li:hover > a{
+      opacity:0.5;
+    }
+  }
+
+  li{
+    list-style: none;
+    padding:5px;
+
+    a{
+      font-size: 28px;
+      color:white;
+      text-decoration: none;
+    }
+  }
+}
+
+.show{
+  opacity:1;
+  height: inherit;
+  transition: $transition-setting-menu;
+}
+
+.hide{
+  opacity: 0;
+  height: 0px;
+  overflow: hidden;
+  transition: $transition-setting-menu;
+}

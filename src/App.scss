@@ -1,6 +1,6 @@
 @import "./../node_modules/sass-autoprefixer/scss/prefixes";
 
-$transition-setting: height 1500ms 1500ms, opacity 1500ms 0ms;
+@import './../NavBar.scss';
 
 body {
   font-family: calibri;
@@ -31,78 +31,6 @@ button:focus {
 
 .App-link {
   color: #09d3ac;
-}
-
-button.nav_expander {
-  line-height: 10px;
-  padding: 0px 10px 20px 10px;
-  font-weight: bold;
-  font-size: 32px;
-  height: 46px;
-  cursor: pointer;
-  background-color:transparent;
-  border: none;
-
-  position: fixed;
-  right: 46px;
-  top: 30px;
-  z-index: 3;
-
-  span {
-    margin-top: -10px;
-    display: block;
-  }
-/*
-  span.default {
-  }
-*/
-  span.expanded {
-    display: none;
-  }
-}
-
-nav#main_nav{
-  background-color: #C55;
-  width: 388px;
-  right: 46px;
-  position: fixed;
-  z-index: 2;
-
-  > ul {
-    padding-top: 31px;
-    padding-bottom: 31px;
-    padding-left: 20px;
-
-    transition: 1.5s;
-
-    li:hover > a{
-      opacity:0.5;
-    }
-  }
-
-  li{
-    list-style: none;
-    padding:5px;
-
-    a{
-      font-size: 28px;
-      color:white;
-      text-decoration: none;
-    }
-  }
-}
-
-.show{
-  opacity:1;
-  height: inherit;
-  transition: $transition-setting;
-}
-
-.hide{
-  opacity: 0;
-  height: 0px;
-  overflow: hidden;
-  transition: $transition-setting;
 }
 
 article {
