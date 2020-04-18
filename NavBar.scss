@@ -12,7 +12,7 @@ button.nav_expander {
   font-size: 32px;
   height: 46px;
   cursor: pointer;
-  background-color:transparent;
+  background-color: transparent;
   border: none;
 
   position: fixed;
@@ -39,24 +39,20 @@ button.nav_expander {
 
   span.expanded {
     animation-name: span_e_kf;
-    animation-duration: 1s;
-    animation-fill-mode: forwards;
+    @include animation-setting-burger-expanded;
 
     div{
       &.one{
         animation-name: one_kf;
-        animation-duration: 1s;
-        animation-fill-mode: forwards;
+        @include animation-setting-burger-expanded;
       }
       &.two{
         animation-name: two_kf;
-        animation-duration: 2s;
-        animation-fill-mode: forwards;
+        @include animation-setting-burger-expanded;
       }
       &.three{
         animation-name: three_kf;
-        animation-duration: 1s;
-        animation-fill-mode: forwards;
+        @include animation-setting-burger-expanded;
       }
     }
   }

@@ -22,7 +22,7 @@ export default class NavBar extends React.Component {
    * @param {void}
    * @return {void}
    */
-  showMenu(){  console.log( "renegade was a cool game" );
+  showMenu(){
     //base the menu visibility on the state property
     this.setState({
       menu_active: !this.state.menu_active
@@ -61,6 +61,7 @@ export default class NavBar extends React.Component {
 
     var { items: nav_items, id = "" } = this.props;
 
+    var burgerClassName = this.state.menu_active ? "expanded" : "default";
     var navClassName = this.state.menu_active ? "show" : "hide";
 
     var blog_url = Config.blog_url;
@@ -72,7 +73,8 @@ export default class NavBar extends React.Component {
     }
 
     return <>
-        <ThreeRingHamburgerButton showMenu={this.showMenu} />
+        <ThreeRingHamburgerButton showMenu={this.showMenu}
+          burgerClassName={burgerClassName} />
         <nav id={id} className={navClassName}>
           <ul> {nav_render} </ul>
         </nav>
