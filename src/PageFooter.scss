@@ -1,10 +1,9 @@
 footer{
   background-color: #CCC;
-
   color: black;
-
   margin: 20pt auto 0px 0px;
-  padding: 20pt 15vw 20pt 15vw;
+  padding: 20pt 15vw 60pt 15vw;
+  border-bottom: 40pt solid #888;
 
   h2{
     text-transform: uppercase;
@@ -12,37 +11,35 @@ footer{
   }
 
   nav{
+    &, &.show{
+      overflow: visible;
+      padding-bottom: 25pt;
+      height: initial;
+    }
+
     ul {
       padding-left: 0px;
+      column-count: 2;
 
       li{
         list-style: none;
         font-size: 18pt;
 
-        margin-bottom: 40pt;
+        margin-bottom: 20pt;
         margin-right: 30pt;
 
-        display: inline-block;
-
         &:first-child{
-          text-transform: uppercase;
-          font-size: 3em;
-          font-weight:bold;
-          display: block;
-
-          a:link, & a:visited{
-            text-decoration:none;
-
-            color:black;
-
-            &:hover{
-              text-decoration: underline;
-            }
-          }
+          display: none;
         }
   
         a:link, & a:visited{
           color: #333;
+          text-decoration: underline #3333;
+        }
+
+        a:hover{
+          color: black;
+          text-decoration: underline black;
         }
       }
     }
