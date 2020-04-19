@@ -1,0 +1,54 @@
+footer{
+  background-color: #CCC;
+
+  color: black;
+
+  margin: 20pt auto 0px 0px;
+  padding: 20pt 15vw 20pt 15vw;
+
+  h2{
+    text-transform: uppercase;
+    font-size: 3em;
+  }
+
+  nav{
+    ul {
+      padding-left: 0px;
+
+      li{
+        list-style: none;
+        font-size: 18pt;
+
+        margin-bottom: 40pt;
+        margin-right: 30pt;
+
+        display: inline-block;
+
+        &:first-child{
+          text-transform: uppercase;
+          font-size: 3em;
+          font-weight:bold;
+          display: block;
+
+          a:link, & a:visited{
+            text-decoration:none;
+
+            color:black;
+
+            &:hover{
+              text-decoration: underline;
+            }
+          }
+        }
+  
+        a:link, & a:visited{
+          color: #333;
+        }
+      }
+    }
+  }
+
+  p{
+    font-size: 18pt;
+  }
+}

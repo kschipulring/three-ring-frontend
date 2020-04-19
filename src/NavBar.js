@@ -62,7 +62,7 @@ export default class NavBar extends React.Component {
     var { items: nav_items, id = "" } = this.props;
 
     var burgerClassName = this.state.menu_active ? "expanded" : "default";
-    var navClassName = this.state.menu_active ? "show" : "hide";
+    var navClassName = this.state.menu_active || !this.props.burger_menu ? "show" : "hide";
 
     var blog_url = Config.blog_url;
 
@@ -72,12 +72,17 @@ export default class NavBar extends React.Component {
       nav_render = nav_items.map( item => this.navItem( item, blog_url ) );
     }
 
-    return <>
-        <ThreeRingHamburgerButton showMenu={this.showMenu}
-          burgerClassName={burgerClassName} />
+    let burger_menu = this.props.burger_menu ?
+      <ThreeRingHamburgerButton showMenu={this.showMenu}
+      burgerClassName={burgerClassName} /> : "";
+
+    let final_menu = (<>
+        {burger_menu}
         <nav id={id} className={navClassName}>
           <ul> {nav_render} </ul>
         </nav>
-      </>;
+      </>);
+
+    return final_menu;
   }
 }

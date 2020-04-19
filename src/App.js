@@ -16,6 +16,8 @@ import NavBar from './NavBar';
 import ReactiveForm from './ReactiveForm/index';
 import ThreeRingModal from './ThreeRingModal';
 
+import PageFooter from './PageFooter';
+
 import './App.scss';
 
 class App extends React.Component {
@@ -227,12 +229,14 @@ class App extends React.Component {
               </Route>
             </Switch>
 
-            <NavBar id="main_nav" items={nav_items} />
+            <NavBar id="main_nav" items={nav_items} burger_menu="true" />
 
             <ThreeRingModal showModal={this.state.showModal}
               handleCloseModal={this.handleCloseModal} />
 
             {this.pageItems(items)}
+
+            <PageFooter items={nav_items} />
           </Router>
         </main>
       );
