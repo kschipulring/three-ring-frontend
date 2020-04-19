@@ -18,9 +18,13 @@ form {
     }
   }
 
-  li{
-    list-style-type: none;
-    font-size: 20pt;
+  ol {
+    padding-left: 0px;
+
+    li{
+      list-style-type: none;
+      font-size: 20pt;
+    }
   }
 
   .wpcf7-form-control-wrap {

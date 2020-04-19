@@ -1,37 +1,80 @@
-section#pfhub_portfolio_portfolio_content_1 {
-  display: none;
-}
+article.case-studies{
+  h2:first-of-type{
+    margin-bottom: 0px;
+  }
 
-ul#pfhub_portfolio_portfolio_popup_list_1{
-  li {
-    list-style: none;
-    font-size: 20pt;
+  > section {
+    display: none;
+  }
+  
+  > ul{
+    padding-left: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
 
-    div.heading-navigation{
-      display: none;
-    }
+    > li {
+      list-style: none;
+      font-size: 20pt;
 
-    h3{
-      font-size: 32pt;
-    }
+      /*width: calc(41% - 60px);
+      margin: 20px 100px 100px 0px;*/
 
-    h6{
-      font-size: 24pt;
-    }
+      width: 80%;
 
-    .description{
-      ul {
-        margin-bottom: 50px;
+      ul.thumbs-list{
+        display:none;
+      }
 
-        li {
-          list-style-type: "- ";
+      li:blank, & div:blank {
+        display: none;
+      }
+  
+      div.heading-navigation{
+        display: none;
+      }
+  
+      h3{
+        font-size: 32pt;
+      }
+  
+      h6{
+        font-size: 24pt;
+      }
+
+      .image-block{
+        /*width: 200px;*/
+
+        width: 100%;
+
+        img {
+          width: inherit;
+          height: 335px;
+          object-fit: cover;
+        }
+
+      }
+  
+      .description{
+        ul {
+          margin-bottom: 50px;
+  
+          li {
+            list-style-type: "- ";
+          }
         }
       }
+  
+      .button-block{
+        margin-bottom: 75px;
+      }
     }
-
-    .button-block{
-      margin-bottom: 75px;
-    }
-  }
+  }  
 }
 
+@media only screen and (min-width: $thr-medium-screen) {
+  article.case-studies > ul > li {
+    width: calc(41% - 60px);
+    margin: 20px 20px 100px 0px;
+  }
+}

@@ -10,6 +10,7 @@
 @import './AboutUs';
 @import './PageFooter';
 
+
 body {
   font-family: calibri, Arial, Helvetica, sans-serif;
 }
@@ -49,6 +50,8 @@ article {
 
   min-height: calc( 100vh - 126px );
 
+  font-size: 16pt;
+
   img.header-img{
     max-width:40vw;
     min-width:100px;
@@ -60,7 +63,7 @@ article {
     color: #333;
   }
 
-  p {
+  p, li {
     color: #666;
     font-size: 16pt;
   }
@@ -71,7 +74,7 @@ article {
 
   .wp-block-button__link, & .wpforms-submit, & .wpcf7-form-control.wpcf7-submit{
     background-color: #9c0d0d;
-    width: 272px;
+    width: 302px;
     display: block;
     text-align: center;
     /*vertical-align: middle;*/
@@ -100,10 +103,10 @@ article {
   a{
     text-decoration: none;
     color:black;
-    font-weight:bold;
+    font-weight: bold;
 
     &:hover{
-      text-decoration:underline;
+      text-decoration: underline;
     }
 
     &:active, &:focus {
