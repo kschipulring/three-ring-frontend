@@ -4,6 +4,7 @@
 @import './../NavBar';
 @import './ReactiveForm/index';
 @import './PortfolioCaseStudies';
+@import './PageFooter';
 
 body {
   font-family: calibri, Arial, Helvetica, sans-serif;
@@ -138,6 +139,13 @@ article {
       }
     }
   }
+
+  &.about-us{
+
+    h3{
+      margin-top: 4em;
+    }
+  }
 }
 
 @keyframes example {
@@ -155,6 +163,9 @@ article {
 
     h2{
       font-size: 32pt;
+    }
+    h3{
+      font-size: 24pt;
     }
     p {
       font-size: 20pt;

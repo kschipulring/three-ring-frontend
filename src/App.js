@@ -166,8 +166,12 @@ class App extends React.Component {
 
       item.content.rendered = item.content.rendered.replace( "<h7", "<h6" );
 
+      let item_id = item.link.replace(Config.blog_url, "");
+
+      let item_className =  item_id.replace(/[/|\\]/g, "");
+
       return (
-        <article key={item.id} id={item.link.replace(Config.blog_url, "")}>
+        <article key={item.id} id={item_id} className={item_className}>
           { img_tag }
 
           <h2>{ Utilities.decodeEntities(item.title.rendered) }</h2>

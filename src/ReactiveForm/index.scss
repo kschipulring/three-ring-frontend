@@ -49,8 +49,8 @@ form {
     border: #CCC thin solid;
 
     &:invalid {
-      background-color: pink;
-      border-color:red;
+      background-color: #FFF8F8;
+      border-color:#BB8585;
     }
   }
 
