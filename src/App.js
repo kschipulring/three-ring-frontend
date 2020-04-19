@@ -233,7 +233,9 @@ class App extends React.Component {
               </Route>
             </Switch>
 
-            <NavBar id="main_nav" items={nav_items} burger_menu="true" />
+            <header>
+              <NavBar id="main_nav" items={nav_items} burger_menu="true" />
+            </header>
 
             <ThreeRingModal showModal={this.state.showModal}
               handleCloseModal={this.handleCloseModal} />

@@ -70,7 +70,7 @@ button.nav_expander {
 
 @keyframes two_kf {
   0%   { transform: scaleX(1) translate(0px); }
-  100% { transform: scaleX(1.75) translate(-4px); }
+  100% { transform: scaleX(1) translate(-4px); }
 }
 
 @keyframes three_kf {
@@ -112,12 +112,13 @@ nav#main_nav{
 }
 
 .show{
-  opacity:1;
-  height: inherit;
+  opacity: 1;
+  height: 364px;
+  overflow: hidden;
   transition: $transition-setting-menu;
 }
 
-.hide{
+.hide, .hiding{
   opacity: 0;
   height: 0px;
   overflow: hidden;
