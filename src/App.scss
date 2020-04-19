@@ -1,5 +1,8 @@
 @import "./../node_modules/sass-autoprefixer/scss/prefixes";
 
+/* SASS variables */
+@import './sass-vars';
+
 @import './Modal';
 @import './../NavBar';
 @import './ReactiveForm/index';
@@ -147,7 +150,7 @@ article {
   to {background-color: $modal-overlay-bg; opacity: initial;}
 }
 
-@media only screen and (min-width: 768px) {
+@media only screen and (min-width: $thr-medium-screen) {
   button.nav_expander, nav{
     right:25%;
   }
@@ -167,11 +170,11 @@ article {
   }
 }
 
-@media only screen and (min-width: 1152px) {
+@media only screen and (min-width: $thr-big-screen) {
   article {
     width: 66%;
 
-    &#\/home\/{
+    &.home{
       width: 50%;
       margin-left: auto;
   
