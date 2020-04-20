@@ -1,7 +1,7 @@
-$transition-setting-menu: height 1500ms 1500ms, opacity 1500ms 0ms;
+$transition-setting-menu: height 500ms 0ms, opacity 500ms 0ms;
 
 @mixin animation-setting-burger-expanded {
-  animation-duration: 1s;
+  animation-duration: 500ms;
   animation-fill-mode: forwards;
 }
 
@@ -60,7 +60,7 @@ button.nav_expander {
 
 @keyframes span_e_kf {
   0%   { transform: rotate(0deg); }
-  100% { transform: rotate(-90deg) translate(-15px, 0px); }
+  100% { transform: rotate(-90deg) translate(-20px, -10px); }
 }
 
 @keyframes one_kf {
@@ -123,4 +123,10 @@ nav#main_nav{
   height: 0px;
   overflow: hidden;
   transition: $transition-setting-menu;
+}
+
+@media only screen and (min-width: $thr-medium-screen) {
+  button.nav_expander, nav{
+    right: 67px;
+  }
 }
