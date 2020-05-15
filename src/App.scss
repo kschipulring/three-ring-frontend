@@ -50,7 +50,7 @@ article {
 
   min-height: calc( 100vh - 126px );
 
-  font-size: 16pt;
+  font-size: $thr-fontsize-base;
 
   img.header-img{
     max-width:40vw;
@@ -65,7 +65,6 @@ article {
 
   p, li {
     color: #666;
-    font-size: 16pt;
   }
 
   .wp-block-button__link, & .wpforms-submit{
