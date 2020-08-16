@@ -38,8 +38,9 @@ export default class Utilities {
    * @param {number} k - for each Link element to be unique and not make React cranky.
    * @return {Link(object)} - an individual Link element.
    */
-  static a2LinkTransform(node, k){
-    return (
+  static a2LinkTransform(node, k){  console.warn( ["attribs", node] );
+    //interal links inside this app which use the clever routing scheme.
+    let internal_link = (
       <Link to={node.attribs.href} className={node.attribs.class || "" } key={k}>
         {
           node.children.map(
@@ -48,5 +49,20 @@ export default class Utilities {
         }
       </Link>
     );
+
+    //external links outside this app
+    let external_link = (<a href={node.attribs.href}
+      className={node.attribs.class || "" } key={k} rel="noopener noreferrer"
+      target="_blank">
+      {
+        node.children.map(
+          (item) => item.data || item.children.map( i => i.data || "" )
+        )
+      }
+    </a>);
+
+    let retval = node.attribs.href.includes("http") ? external_link : internal_link ;
+
+    return retval;
   }
 }
