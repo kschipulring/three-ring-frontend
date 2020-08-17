@@ -183,6 +183,8 @@ class App extends React.Component {
             ReactHtmlParser( item.content.rendered, {
               transform: (node, k) => {
                 if( !["style", "script"].includes(node.name) ){
+                  node.slug = item.slug;
+
                   return this.renderIfTag(node, k);
                 }else{
                   return <br key={k} />; //a blank nothingburger instead of annoying style tag.
@@ -210,6 +212,26 @@ class App extends React.Component {
           return <ReactiveForm {...node.attribs} key={k} k={k}
             onSubmitModal={this.handleOpenModal} children={node.children} />;
         default:
+          if( node.slug === "case-studies"  ){
+            if( node.name === "section" ){
+              //console.log( {node} );
+              return "";
+            }
+            
+            if( node.name === "ul" && node.attribs.class &&
+              node.attribs.class.includes("pfhub_portfolio_portfolio_popup_list")
+            ){
+              console.log( {node} );
+
+              node.attribs.className = node.attribs.class;
+              delete node.attribs.class;
+
+              return <ul {...node.attribs} key={k} k={k}>
+
+              </ul>;
+            }
+          }
+          
         break;
       }
     }
