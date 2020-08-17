@@ -127,6 +127,7 @@ class App extends React.Component {
     return "";
   }
 
+  //really for the forms, mostly.
   handleOpenModal() {
     this.stateUpdate({showModal: true});
   }
@@ -135,6 +136,7 @@ class App extends React.Component {
     this.stateUpdate({showModal: false});
   }
 
+  //scrolls to where the associated content is, but only after that page content loads.
   pageScrollTo(){
     let element = document.getElementById( App.current_page );
   
@@ -144,6 +146,7 @@ class App extends React.Component {
     }
   }
 
+  //handles for the hashbang nav: uses above method.
   componentDidUpdate(){
     this.pageScrollTo();
   }
