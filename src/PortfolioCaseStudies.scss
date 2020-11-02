@@ -2,25 +2,28 @@ article.case-studies{
   h2:first-of-type{
     margin-bottom: 0px;
   }
-
-  > section {
-    display: none;
-  }
   
-  > ul{
+  ul{
     padding-left: 0;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
 
-    > li {
+     li {
       list-style: none;
       font-size: 20pt;
 
       /*width: calc(41% - 60px);
       margin: 20px 100px 100px 0px;*/
 
-      width: 80%;
+      width: 40%;
+
+      img{
+        width:100%;
+        max-height: 350px;
+        object-fit: cover;
+        cursor: pointer;
+      }
 
       ul.thumbs-list{
         display:none;
@@ -69,7 +72,17 @@ article.case-studies{
         margin-bottom: 75px;
       }
     }
-  }  
+  }
+}
+
+.ReactModal__Body--open .Modal{
+  height: calc(95vh - 64px);
+}
+
+.pfhub-portfolio-popup-wrapper{
+  .clear-both{
+    clear: both;
+  }
 }
 
 @media only screen and (min-width: $thr-medium-screen) {
