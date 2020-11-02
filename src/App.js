@@ -9,25 +9,24 @@ import {
   Redirect
 } from "react-router-dom";
 
+import CoreComponent from './CoreComponent';
+
 import Config from './Config';
 import Utilities from './Utilities';
 import NavBar from './NavBar';
 
 import ReactiveForm from './ReactiveForm/index';
-import ThreeRingModal from './ThreeRingModal';
+//import ThreeRingModal from './ThreeRingModal';
+import FormModal from './ReactiveForm/FormModal';
 
 import PageFooter from './PageFooter';
 
+import PortfolioCaseStudies from './PortfolioCaseStudies';
+
 import './App.scss';
 
-class App extends React.Component {
+class App extends CoreComponent {
   static current_page = "";
-
-  stateUpdate(prop){
-    let new_state = { ...this.state, ...prop };
-    
-    this.setState(new_state);
-  }
 
   constructor(props) {
     super(props);
@@ -45,31 +44,6 @@ class App extends React.Component {
     for( let i in bind_arr ){
       this[ bind_arr[i]] = this[ bind_arr[i]].bind(this);
     }
-  }
-
-  /**
-   * Universal middleware function for AJAX functions.
-   * @param {string} ep - URL endpoint.
-   * @param {function} curry_func - URL endpoint.
-   * @return {void}
-   */
-  ajaxLoadThen( ep, curry_func ){
-    return fetch( Config.base_api_url + ep)
-    .then(res => res.json())
-    .then(
-      (result) => {
-        curry_func( result );
-      },
-
-      /*
-      Note: it's important to handle errors here
-      instead of a catch() block so that we don't swallow
-      exceptions from actual bugs in components.
-      */
-      (error) => {
-        this.stateUpdate({isLoaded: true, error});
-      }
-    );
   }
 
   componentDidMount() {
@@ -211,27 +185,9 @@ class App extends React.Component {
         case "form":
           return <ReactiveForm {...node.attribs} key={k} k={k}
             onSubmitModal={this.handleOpenModal} children={node.children} />;
+        case "pfhub-portfolio":
+          return <PortfolioCaseStudies pfhub_id={node.attribs.pfhub_id} key={k} k={k} />;
         default:
-          if( node.slug === "case-studies"  ){
-            if( node.name === "section" ){
-              //console.log( {node} );
-              return "";
-            }
-            
-            if( node.name === "ul" && node.attribs.class &&
-              node.attribs.class.includes("pfhub_portfolio_portfolio_popup_list")
-            ){
-              console.log( {node} );
-
-              node.attribs.className = node.attribs.class;
-              delete node.attribs.class;
-
-              return <ul {...node.attribs} key={k} k={k}>
-
-              </ul>;
-            }
-          }
-          
         break;
       }
     }
@@ -262,7 +218,7 @@ class App extends React.Component {
               <NavBar id="main_nav" items={nav_items} burger_menu="true" />
             </header>
 
-            <ThreeRingModal showModal={this.state.showModal}
+            <FormModal showModal={this.state.showModal}
               handleCloseModal={this.handleCloseModal} />
 
             {this.pageItems(items)}
