@@ -140,6 +140,7 @@ class ReactiveForm extends React.Component {
   renderIfTag(node, k){
     if (node.type === 'tag' ) {
 
+      //which html node type is this?
       switch(node.name) {
         case "select":
           /* starts out as null, because the 'node' object here does not have
