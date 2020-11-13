@@ -1,7 +1,7 @@
 import Config from './Config';
 import React from 'react';
-import AliceCarousel from 'react-alice-carousel';
-import "react-alice-carousel/lib/alice-carousel.css";
+
+import Carousel from "react-elastic-carousel";
 
 import CoreComponent from './CoreComponent';
 
@@ -16,7 +16,8 @@ export default class PortfoliosCaseStudies extends CoreComponent {
       lightbox_contents: "",
       modal_inner_html_array: [],
       showModal: false,
-      currentIndex: 0
+      currentIndex: 0,
+      Carousel: {}
     };
 
     let url = Config.ep_portfolio + "/" + props.pfhub_id;
@@ -50,7 +51,10 @@ export default class PortfoliosCaseStudies extends CoreComponent {
   handleOpenModal(image_wpid, key=0){
     this.stateUpdate({showModal: true, currentIndex: key});
 
-    console.log( image_wpid, key, this.state );
+    //make the Alice Carousel go elsewhere
+    //this.Carousel.slideTo( key );
+
+    console.log( image_wpid, key, this.state, this.Carousel );
   }
 
   handleCloseModal(){
@@ -180,6 +184,19 @@ export default class PortfoliosCaseStudies extends CoreComponent {
     return <ul>{retval_contents} {this.state.showModal}</ul>;
   }
 
+
+  slideTo = (i) => this.setState({ currentIndex: i });
+
+  onSlideChanged = (e) => this.setState({ currentIndex: e.item });
+
+  slideNext = () => this.setState({ currentIndex: this.state.currentIndex + 1 });
+
+  slidePrev = () => this.setState({ currentIndex: this.state.currentIndex - 1 });
+
+  goto(n) {
+    this.carousel.goTo(n);
+  }
+
   render(){
     var carousel_contents = this.state.modal_inner_html_array; //this.state.currentIndex
 
@@ -210,9 +227,14 @@ export default class PortfoliosCaseStudies extends CoreComponent {
             </div>
 
             <div className="modal-body">
-              <AliceCarousel activeIndex={2} items={items} slideTo={2}>
+              <button onClick={() => this.carousel.slidePrev()}>Prev</button>
+              <button onClick={() => this.carousel.slideNext()}>Next</button>
+              <hr />
+              <Carousel ref={(ref) => (this.carousel = ref)}
+                initialActiveIndex={this.state.currentIndex}>
 
-              </AliceCarousel>
+                {items.map(item => <div>{item}</div>)}
+              </Carousel>
 
             </div>
             <div className="modal-footer">
