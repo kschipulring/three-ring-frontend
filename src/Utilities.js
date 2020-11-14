@@ -38,7 +38,7 @@ export default class Utilities {
    * @param {number} k - for each Link element to be unique and not make React cranky.
    * @return {Link(object)} - an individual Link element.
    */
-  static a2LinkTransform(node, k){  console.warn( ["attribs", node] );
+  static a2LinkTransform(node, k){
     //interal links inside this app which use the clever routing scheme.
     let internal_link = (
       <Link to={node.attribs.href} className={node.attribs.class || "" } key={k}>
