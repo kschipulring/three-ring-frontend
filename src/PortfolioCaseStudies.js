@@ -1,11 +1,9 @@
-import Config from './Config';
 import React from 'react';
-
 import Carousel from "react-elastic-carousel";
-
-import CoreComponent from './CoreComponent';
-
 import Modal from 'react-modal';
+
+import Config from './Config';
+import CoreComponent from './CoreComponent';
 
 export default class PortfoliosCaseStudies extends CoreComponent {
   constructor(props){
@@ -13,14 +11,14 @@ export default class PortfoliosCaseStudies extends CoreComponent {
 
     this.state = {
       contents: "",
-      lightbox_contents: "",
       modal_inner_html_array: [],
       showModal: false,
       currentIndex: 0,
       Carousel: {}
     };
 
-    let url = Config.ep_portfolio + "/" + props.pfhub_id;
+    //WP REST API URL for the desired portfolio / gallery
+    let url = `${Config.ep_portfolio}/${props.pfhub_id}`;
 
     this.ajaxLoadThen( url, (result) => {
       console.log( {result} );
@@ -35,32 +33,51 @@ export default class PortfoliosCaseStudies extends CoreComponent {
     }, this);
 
     // This binding is necessary to make `this` work in the callback
-    var bind_arr = ["handleCloseModal", "handleOpenModal"];
+    var bind_arr = ["handleCloseModal", "handleOpenModal", "handleThumbChange"];
 
     for( let i in bind_arr ){
-      this[ bind_arr[i]] = this[ bind_arr[i]].bind(this);
+      this[ bind_arr[i] ] = this[ bind_arr[i] ].bind(this);
     }
   }
-  
-  stateUpdate(prop){
-    let new_state = { ...this.state, ...prop };
-    
-    this.setState(new_state);
-  }
 
-  handleOpenModal(image_wpid, key=0){
+  /**
+   * Event Handler for whenever user opens a modal.
+   *
+   * @param {number} key - Sets the 'currentIndex' property of this components state.
+   * This is used by the modal to determine which Carousel slide to currently show.
+   */
+  handleOpenModal(key=0){
     this.stateUpdate({showModal: true, currentIndex: key});
-
-    //make the Alice Carousel go elsewhere
-    //this.Carousel.slideTo( key );
-
-    console.log( image_wpid, key, this.state, this.Carousel );
   }
 
+  /**
+   * Event Handler for whenever user closes a modal. Antonym of above.
+   * @param {void}
+   */
   handleCloseModal(){
     this.stateUpdate({showModal: false});
   }
+ 
+  /**
+   * Event Handler for whenever user clicks an image thumb within the carousel 
+   * modal to make it the prime one within that particular portfolio project.
+   *
+   * @param {integer} item_id - the id of the portfolio piece from the Wordpress site.
+   * @param {string} URL - the URL of the image that should be the main image 
+   * within the currently shown project.
+   */
+  handleThumbChange(item_id, URL){
+    //yes, lazy old school JS way, not 'React' way to change image source
+    document.getElementById(`wd-cl-img1_${item_id}`).src = URL;
+  }
 
+  /**
+  * Takes the list of images from one gallery item. Then cleans their URLs
+  * and returns a modified image URL array for the gallery item.
+  *
+  * @param {object} item - gallery item.
+  * @return {string[]} an array of URLs for a gallery item.
+  */
   itemFixedURLs(item){
     //get the images per project.
     let old_urls = item.image_url.split(";");
@@ -68,7 +85,7 @@ export default class PortfoliosCaseStudies extends CoreComponent {
     //remove empty entities
     old_urls = old_urls.filter((e) => { return true && e });
 
-    //if this is not a .svg file, then get the wordpress filtered version.
+    //if this is not a .svg file, then get the wordpress filtered version of image URL.
     let fixed_urls = old_urls.map( i => {
       return i.includes(".svg")? i : i.replace(/http(s)?:\/\//i, "https://i0.wp.com/");
     });
@@ -76,93 +93,70 @@ export default class PortfoliosCaseStudies extends CoreComponent {
     return fixed_urls;
   }
 
+  /**
+  * The HTML content for the inside of the modal, which also happens to be 
+  * the contents for the carousel. It is the same list of images as what 
+  * appears on the regular page portion of Case Studies.
+  *
+  * @param {object[]} items - array of gallery objects.
+  * Each item is an object containing the image information.
+  * @return {jsx} the rendered HTML in JSX format.
+  */
   renderModalHTML( items ){
     let retval_modal_contents = items.map( (item, key) => {
-      //the image URLs
+      //the image URLs for this project
       let fixed_urls = this.itemFixedURLs(item);
 
+      //considered to be the primary image of a gallery portfolio item.
       let [first_image] = fixed_urls;
 
+      /* possible image display sizes.  The first is for the modal carousel,
+      the second is for thumbnail (only for inside of the modal carousel). */
       let [big, thumb] = ["?w=768", "?w=150"];
 
-      first_image += thumb;
+      first_image += big;
 
-      console.log( {fixed_urls, first_image} );
+      let item_class = "pfhub-portfolio-popup-wrapper";
 
-      let item_class = "portelement portelement_" + item.id;
-
-    
-      return <div key={key} className={item_class}>
-        <img src={first_image} alt={item.name} />
-        <h4>{item.name}</h4>
-      </div>
-    });
-
-    console.info( {retval_modal_contents} );
-
-    return retval_modal_contents;
-  }
-
-
-  renderModalHTMLOld( items ){
-    let retval_modal_contents = items.map( (item, key) => {
-
-      //the image URLs
-      let fixed_urls = this.itemFixedURLs(item);
-
-      let [first_image] = fixed_urls;
-
-      let [big, thumb] = ["?w=768", "?w=150"];
-
-      first_image += thumb;
-
-      console.log( {fixed_urls, first_image} );
-
-      //let item_class = "portelement portelement_" + item.id;
-
-    /*
-    return <div key={key} className={item_class}>
-      <img src={first_image} alt={item.name} />
-      <h4>{item.name}</h4>
-    </div>*/
-
-    console.log( "this.state.currentIndex = ", this.state.currentIndex );
-
-    return <div className={"pfhub-portfolio-popup-wrapper pfhub-portfolio-popup-wrapper_2"} key={key}>
-        <div className={"image-block_2 image-block"}>
-          <img alt={item.name} id="wd-cl-img1" src={first_image} />
+      return <div key={key} className={item_class} id={`${item_class}_${item.id}`}>
+        <div className={`image-block_${item.id} image-block`}>
+          <img alt={item.name} id={`wd-cl-img1_${item.id}`} src={first_image} />
         </div>
+        
         <div className={"right-block"}>
           <h3 className={"title"}>{item.name}</h3>
-          <div>
-          <ul className={"thumbs-list thumbs-list_2"}>
-
+          
+          <ul className={"thumbs-list"} id={`thumbs-list_${item.id}`}>
             {fixed_urls.map((fixed_url, index) => { 
               let cn = index === this.state.currentIndex ? "active" : "";
 
               return (
-              <li className={cn} key={index}>
-                <a href={fixed_url} className={"img-thumb"} title={item.name}>
-                  <img src={fixed_url + big} alt={item.name} />
-                </a>
-              </li>
-            )})}
-
-
+                <li className={cn} key={index}>
+                  <button onClick={() => this.handleThumbChange(item.id, fixed_url + big)}>
+                    <img src={fixed_url + thumb} alt={item.name} />
+                  </button>
+                </li>
+              )
+            })}
           </ul>
+          <div className={"description"}>{item.description}</div>
+          <div className={"clear-both"}></div>
         </div>
-        <div className={"description"}>{item.description}</div>
         <div className={"clear-both"}></div>
       </div>
-      <div className={"clear-both"}></div>
-    </div>
     });
-
-    console.log( {retval_modal_contents} );
 
     return retval_modal_contents;
   }
 
+  /**
+   * Generates the HTML content for the main part of the gallery which 
+   * shows up on the page.
+   *
+   * @param {object[]} items - array of gallery objects. 
+   * Each item is an object containing the image information.
+   * @return {jsx} the rendered HTML in JSX format.
+   */
   renderGalleryHTML( items ){
     let retval_contents = items.map( (item, key) => {
       let fixed_urls = this.itemFixedURLs(item);
@@ -171,12 +165,12 @@ export default class PortfoliosCaseStudies extends CoreComponent {
 
       first_image += "?w=450";
 
-      console.log( {first_image} );
-
       let element_id = "pfhub_portfolio_pupup_element_" + item.id;
 
-      return <li key={key} id={element_id} className="portelement">
-        <img src={first_image} alt={item.name} onClick={() => this.handleOpenModal(item.id, key)} />
+      /* each on page gallery item is clickable - which opens the modal that 
+      presents more about the gallery item. */
+      return <li key={key} id={element_id} className={"portelement"}>
+        <img src={first_image} alt={item.name} onClick={() => this.handleOpenModal(key)} />
         <h4>{item.name}</h4>
       </li>
     });
@@ -184,28 +178,20 @@ export default class PortfoliosCaseStudies extends CoreComponent {
     return <ul>{retval_contents} {this.state.showModal}</ul>;
   }
 
-
-  slideTo = (i) => this.setState({ currentIndex: i });
-
-  onSlideChanged = (e) => this.setState({ currentIndex: e.item });
-
-  slideNext = () => this.setState({ currentIndex: this.state.currentIndex + 1 });
-
-  slidePrev = () => this.setState({ currentIndex: this.state.currentIndex - 1 });
-
+  /**
+   * Tells the carousel to go to the specified slide, specified by array index.
+   * @param {integer} n - the slide number to go to.
+   */
   goto(n) {
     this.carousel.goTo(n);
   }
 
+  /**
+   * Standard React Component method for display.
+   */
   render(){
-    var carousel_contents = this.state.modal_inner_html_array; //this.state.currentIndex
-
-    const items = [
-      <img alt="a" src="https://i0.wp.com/threering-media.s3.amazonaws.com/blog/wp-content/uploads/2020/04/19193624/palma.jpg?w=150" />,
-      <img alt="b" src="http://threering-media.s3.amazonaws.com/blog/wp-content/uploads/2019/12/13113020/MTA_NYC_logo.svg?w=150" />,
-      <img src="https://i0.wp.com/threering-media.s3.amazonaws.com/blog/wp-content/uploads/2020/04/19200127/puppy-image.jpg?w=150"
-        alt="Puppies Of Westport" />,
-    ];
+    //the carousel slides.  Goes into the modal directly.
+    var carousel_contents = this.state.modal_inner_html_array;
 
     return (
       <span>
@@ -213,7 +199,7 @@ export default class PortfoliosCaseStudies extends CoreComponent {
       
         <Modal 
           isOpen={this.state.showModal}
-          contentLabel="lee enfield"
+          contentLabel="Case Study closeup"
           className="Modal"
           overlayClassName="Overlay"
           handleCloseModal={this.handleCloseModal} 
@@ -225,17 +211,12 @@ export default class PortfoliosCaseStudies extends CoreComponent {
                 <span aria-hidden="true">×</span>
               </button>
             </div>
-
             <div className="modal-body">
-              <button onClick={() => this.carousel.slidePrev()}>Prev</button>
-              <button onClick={() => this.carousel.slideNext()}>Next</button>
-              <hr />
               <Carousel ref={(ref) => (this.carousel = ref)}
                 initialActiveIndex={this.state.currentIndex}>
 
-                {items.map(item => <div>{item}</div>)}
+                {carousel_contents}
               </Carousel>
-
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-primary"
