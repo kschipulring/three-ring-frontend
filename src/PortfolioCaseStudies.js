@@ -218,12 +218,7 @@ export default class PortfoliosCaseStudies extends CoreComponent {
                 {carousel_contents}
               </Carousel>
             </div>
-            <div className="modal-footer">
-              <button type="button" className="btn btn-primary"
-                data-dismiss="modal">
-                xxx
-              </button>
-            </div>
+            <div className="modal-footer"> </div>
           </div>
         </Modal>
       </span>

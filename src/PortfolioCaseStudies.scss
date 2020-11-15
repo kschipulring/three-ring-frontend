@@ -9,7 +9,7 @@ article.case-studies{
     flex-wrap: wrap;
     justify-content: space-between;
 
-     li {
+    li {
       list-style: none;
       font-size: 20pt;
 
@@ -39,6 +39,11 @@ article.case-studies{
   
       h3{
         font-size: 32pt;
+      }
+
+      h4{
+        margin-top: 30px;
+        margin-bottom: 50px;
       }
   
       h6{
@@ -73,10 +78,6 @@ article.case-studies{
       }
     }
   }
-}
-
-.ReactModal__Body--open .Modal{
-  height: calc(95vh - 64px);
 }
 
 .pfhub-portfolio-popup-wrapper{
