@@ -1,9 +1,9 @@
 {
   "name": "three-ring-frontend",
-  "version": "0.8.5",
+  "version": "0.8.7",
   "private": true,
   "dependencies": {
-    "node-sass": "^4.13.1",
+    "node-sass": "^4.14.1",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
     "react-elastic-carousel": "^0.9.4",
