@@ -14,23 +14,18 @@ export default class PortfoliosCaseStudies extends CoreComponent {
       modal_inner_html_array: [],
       showModal: false,
       currentIndex: 0,
-      Carousel: {}
+      Carousel: {},
+      loaded: false
     };
 
-    //WP REST API URL for the desired portfolio / gallery
-    let url = `${Config.ep_portfolio}/${props.pfhub_id}`;
-
-    this.ajaxLoadThen( url, (result) => {
-      console.log( {result} );
-
-      //the main HTML of the portfolio grid
-      let contents = this.renderGalleryHTML( result );
-
-      //the HTML for the portfolio modal
-      let modal_inner_html_array = this.renderModalHTML( result );
-
-      this.stateUpdate({contents, modal_inner_html_array});
-    }, this);
+    //if the page was pre-rendered
+    if( props["prerender-json"] ){
+      this.from_cache = true;
+      this.prerender_json = props["prerender-json"];
+    }else{
+      //for regular loads without whole page caching
+      this.portfolioJSONAjax2State(props);
+    }
 
     // This binding is necessary to make `this` work in the callback
     var bind_arr = ["handleCloseModal", "handleOpenModal", "handleThumbChange"];
@@ -38,6 +33,32 @@ export default class PortfoliosCaseStudies extends CoreComponent {
     for( let i in bind_arr ){
       this[ bind_arr[i] ] = this[ bind_arr[i] ].bind(this);
     }
+  }
+
+  componentDidMount() {
+    //for page prerender cached loads. Must be done here, because in constructor, doing this yields an error.
+    if( this.from_cache && !this.state.loaded ){
+      this.portfolioJSON2State( this.prerender_json );
+    }
+  }
+
+  portfolioJSONAjax2State(props){
+    //WP REST API URL for the desired portfolio / gallery
+    let url = `${Config.ep_portfolio}/${props.pfhub_id}`;
+
+    this.ajaxLoadThen( url, (result) => {
+      this.portfolioJSON2State(result);
+    }, this);
+  }
+
+  portfolioJSON2State(result){
+    //the main HTML of the portfolio grid
+    let contents = this.renderGalleryHTML( result );
+
+    //the HTML for the portfolio modal
+    let modal_inner_html_array = this.renderModalHTML( result );
+
+    this.stateUpdate({contents, modal_inner_html_array, loaded: true});
   }
 
   /**
@@ -158,24 +179,27 @@ export default class PortfoliosCaseStudies extends CoreComponent {
    * @return {jsx} the rendered HTML in JSX format.
    */
   renderGalleryHTML( items ){
-    let retval_contents = items.map( (item, key) => {
-      let fixed_urls = this.itemFixedURLs(item);
+    let retval_contents = items.map( (item, key) => this.renderGalleryItem(item, key) );
 
-      let [first_image] = fixed_urls;
+    return <pfhub-portfolio-rendered>{retval_contents} {this.state.showModal}</pfhub-portfolio-rendered>;
+  }
 
-      first_image += "?w=450";
+  //broken out from above for times when a new, individual portfolio item is needed.
+  renderGalleryItem(item, key){
+    let fixed_urls = this.itemFixedURLs(item);
 
-      let element_id = "pfhub_portfolio_pupup_element_" + item.id;
+    let [first_image] = fixed_urls;
 
-      /* each on page gallery item is clickable - which opens the modal that 
-      presents more about the gallery item. */
-      return <li key={key} id={element_id} className={"portelement"}>
-        <img src={first_image} alt={item.name} onClick={() => this.handleOpenModal(key)} />
-        <h4>{item.name}</h4>
-      </li>
-    });
+    first_image += "?w=450";
 
-    return <ul>{retval_contents} {this.state.showModal}</ul>;
+    let element_id = "pfhub_portfolio_pupup_element_" + item.id;
+
+    /* each on page gallery item is clickable - which opens the modal that 
+    presents more about the gallery item. */
+    return <li key={key} id={element_id} className={"portelement"}>
+      <img src={first_image} alt={item.name} onClick={() => this.handleOpenModal(key)} />
+      <h4>{item.name}</h4>
+    </li>
   }
 
   /**
