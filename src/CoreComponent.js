@@ -33,5 +33,4 @@ export default class CoreComponent extends React.Component {
     
     this.setState(new_state);
   }
-
 }

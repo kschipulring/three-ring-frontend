@@ -4,7 +4,26 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+let prerendered = false;
+let nav_items_json = null;
+let main_html_str = null;
+
+if( document.getElementById("footer_nav") && document.getElementById("footer_nav").innerHTML ) {
+  prerendered = true;
+
+  //for the navigation links used by both the menu and the footer
+  let json_str = document.getElementById( "nav_items_json" ).innerHTML || null;
+  nav_items_json = JSON.parse(json_str);
+
+  //for the prerendered html originally from chromedriver via the build/prerender.html file.
+  main_html_str = document.getElementsByTagName("main")[0].outerHTML || null;
+}
+
+let my_props = {prerendered, main_html_str, nav_items_json};
+
+console.log( {my_props} );
+
+ReactDOM.render(<App {...my_props} />, document.getElementById('root'));
 
 //TEST
 // If you want your app to work offline and load faster, you can change
