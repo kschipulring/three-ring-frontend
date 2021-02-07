@@ -15,7 +15,8 @@ export default class PortfoliosCaseStudies extends CoreComponent {
       showModal: false,
       currentIndex: 0,
       Carousel: {},
-      loaded: false
+      loaded: false,
+      portfolio_json: {}
     };
 
     //if the page was pre-rendered
@@ -51,14 +52,14 @@ export default class PortfoliosCaseStudies extends CoreComponent {
     }, this);
   }
 
-  portfolioJSON2State(result){
+  portfolioJSON2State(portfolio_json){
     //the main HTML of the portfolio grid
-    let contents = this.renderGalleryHTML( result );
+    let contents = this.renderGalleryHTML( portfolio_json );
 
     //the HTML for the portfolio modal
-    let modal_inner_html_array = this.renderModalHTML( result );
+    let modal_inner_html_array = this.renderModalHTML( portfolio_json );
 
-    this.stateUpdate({contents, modal_inner_html_array, loaded: true});
+    this.stateUpdate({contents, modal_inner_html_array, loaded: true, portfolio_json});
   }
 
   /**
@@ -106,9 +107,15 @@ export default class PortfoliosCaseStudies extends CoreComponent {
     //remove empty entities
     old_urls = old_urls.filter((e) => { return true && e });
 
-    //if this is not a .svg file, then get the wordpress filtered version of image URL.
+    //what is the main domain that the images come from?
+    var base_url = "https://i0.wp.com/";
+
+    /*
+    if this is not a .svg file, or if it does not already have the base URL inside, 
+    then get the wordpress filtered version of image URL.
+    */
     let fixed_urls = old_urls.map( i => {
-      return i.includes(".svg")? i : i.replace(/http(s)?:\/\//i, "https://i0.wp.com/");
+      return i.includes(".svg") || i.includes( base_url ) ? i : i.replace(/http(s)?:\/\//i, base_url);
     });
 
     return fixed_urls;
@@ -179,9 +186,9 @@ export default class PortfoliosCaseStudies extends CoreComponent {
    * @return {jsx} the rendered HTML in JSX format.
    */
   renderGalleryHTML( items ){
-    let retval_contents = items.map( (item, key) => this.renderGalleryItem(item, key) );
+    let gallery_HTML_items = items.map( (item, key) => this.renderGalleryItem(item, key) );
 
-    return <pfhub-portfolio-rendered>{retval_contents} {this.state.showModal}</pfhub-portfolio-rendered>;
+    return <pfhub-portfolio>{gallery_HTML_items} {this.state.showModal}</pfhub-portfolio>;
   }
 
   //broken out from above for times when a new, individual portfolio item is needed.
@@ -190,7 +197,8 @@ export default class PortfoliosCaseStudies extends CoreComponent {
 
     let [first_image] = fixed_urls;
 
-    first_image += "?w=450";
+    //append a max width URL parameter, but only if it does not have it already.
+    first_image += /\?w\=([0-9])+/.test(first_image) ? "" : "?w=450";
 
     let element_id = "pfhub_portfolio_pupup_element_" + item.id;
 
@@ -245,6 +253,9 @@ export default class PortfoliosCaseStudies extends CoreComponent {
             <div className="modal-footer"> </div>
           </div>
         </Modal>
+        <script type="application/ld+json" id="portfolio_json">
+          { JSON.stringify(this.state.portfolio_json) }
+        </script>
       </span>
     );
   }

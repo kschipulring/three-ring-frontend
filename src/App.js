@@ -31,9 +31,17 @@ class App extends CoreComponent {
   constructor(props) {
     super(props);
 
+    //boolean
     this.prerendered = props.prerendered;
+
+    //possible pre-rendered navigation items. Otherwise, null.
     this.nav_items_json = props.nav_items_json;
+
+    //the prerendered HTML, if it is available.
     this.main_html_str = props.main_html_str;
+
+    //prerendered portfolio json, if it is available.
+    this.portfolio_json = props.portfolio_json;
 
     console.log( {props} );
 
@@ -203,78 +211,13 @@ class App extends CoreComponent {
           return <ReactiveForm {...node.attribs} key={k} k={k}
             onSubmitModal={this.handleOpenModal} children={node.children} />;
         case "pfhub-portfolio":
-          return <PortfolioCaseStudies pfhub_id={node.attribs.pfhub_id} key={k} k={k} />;
-        case "pfhub-portfolio-rendered":
 
-          //just the list items
-          let nc = node.children.filter( ch => ch.name === "li" );
-
-          //getting json items from the rendered portfolio HTML
-          let nc2 = nc.map(ch => {
-            let id = ch.attribs.id.replace("pfhub_portfolio_pupup_element_", "");
-
-            //get the image URL
-            let [img_item] = ch.children.filter( cc => cc.name === "img" );
-            let image_url = img_item.attribs.src;
-
-            //get the image title
-            let [name_item] = ch.children.filter( cc => /^h|figcaption/i.test(cc.name) );
-            let name = name_item.children[0].data;
-
-            return {id, image_url, name};
-          });
-
-          return <PortfolioCaseStudies pfhub_id={node.attribs.pfhub_id} key={k} k={k}
-            prerender-json={nc2} />;
-        default:
+          //'this.portfolio_json' prerendered JSON from prerender cache
+          return <PortfolioCaseStudies pfhub_id={node.attribs.pfhub_id} key={k}
+            k={k} prerender-json={this.portfolio_json} />;
         break;
       }
     }
-  }
-
-  render_new(){
-    //var __html = require('./includer.html');
-    //var template = { __html: __html };
-    var { error, isLoaded, items, nav_items } = this.state;
-
-    let gm = document.getElementsByTagName("main")[0] || null;
-
-    var m = gm && typeof(gm) === "object" && gm.outerHTML ? gm.outerHTML : this.getHTML();
-
-    console.log( {gm}, typeof(gm) );
-
-    var nav_items2 = JSON.parse( this.getNavItemsString() );
-
-    return (
-      <main>
-        <Router>
-          {/* A <Switch> looks through its children <Route>s and
-              renders the first one that matches the current URL. */}
-          <Switch>
-            <Redirect from='/home/' to='/' />
-            <Route path="/:pageId?/:innerPageId?">
-              <this.RouteHandle ready={ this.pageScrollTo } />
-            </Route>
-          </Switch>
-
-          <header>
-            <NavBar id="main_nav" items={nav_items2} burger_menu="true" />
-          </header>
-
-          <FormModal showModal={this.state.showModal}
-            handleCloseModal={this.handleCloseModal} />
-
-          { this.pageItem( m, "everywhere" ) }
-
-          <PageFooter items={nav_items} />
-        </Router>
-
-        {/*for caching of navigation items when a page is prerendered from the chromedriver service */}
-        <script className='structured-data-list' type="application/ld+json" id="nav_items_json">
-          { JSON.stringify(nav_items) }
-        </script>
-      </main>
-    );
   }
 
   renderInner(content, nav_items){
@@ -311,6 +254,11 @@ class App extends CoreComponent {
   }
 
   render() {
+    /* 'isLoaded' is a boolean. 'items' is an array of objects originally gleaned 
+    from the Wordpress API. Each item is an individual page content. 'nav_items'
+    is an array of objects also from WP API which contains data to populate the 
+    navigation bar and also the footer section.
+    */
     var { error, isLoaded, items, nav_items } = this.state;
 
     //the rendering of navigation menu and html to the page.
@@ -319,7 +267,7 @@ class App extends CoreComponent {
     } else if( this.prerendered ) {
 
       //prerendered content from the Chromedriver / Sellenium service.
-      return this.renderInner( this.pageItem( this.main_html_str, "knowhere" ), nav_items );
+      return this.renderInner( this.pageItem( this.main_html_str, "Three Ring Design" ), nav_items );
     } else if (!isLoaded || items.length < 1) {
       return <div>Loading...</div>;
     } else {
