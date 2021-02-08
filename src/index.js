@@ -3,28 +3,13 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import prerenderCache from './prerenderCache';
 
-let prerendered = false;
-let nav_items_json = null;
-let portfolio_json = null;
-let main_html_str = null;
-
-if( document.getElementById("footer_nav") && document.getElementById("footer_nav").innerHTML ) {
-  prerendered = true;
-
-  //for the navigation links used by both the menu and the footer
-  let json_str = document.getElementById("nav_items_json").innerHTML || null;
-  nav_items_json = JSON.parse(json_str);
-
-  //for the portfolio items. This is needed to make the modal features work properly with prerendered content.
-  let json_portfolio_str = document.getElementById("portfolio_json").innerHTML || null;
-  portfolio_json = JSON.parse(json_portfolio_str);
-
-  //for the prerendered html originally from chromedriver via the build/prerender.html file.
-  main_html_str = document.getElementsByTagName("main")[0].outerHTML || null;
-}
-
-let my_props = {prerendered, main_html_str, nav_items_json, portfolio_json};
+/* 
+for handling pre-rendered pages. Must be done here and not in the App class, as
+the special cached DOM elements will not exist after ReactDOM.render... fires 
+*/
+let my_props = prerenderCache();
 
 //Renders the entire webpage, cached or regular
 ReactDOM.render(<App {...my_props} />, document.getElementById('root'));

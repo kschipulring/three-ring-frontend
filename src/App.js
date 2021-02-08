@@ -43,7 +43,8 @@ class App extends CoreComponent {
     //prerendered portfolio json, if it is available.
     this.portfolio_json = props.portfolio_json;
 
-    console.log( {props} );
+    //if the footer was prerendered. BOOLEAN.
+    this.prerendered_footer = props.prerendered_footer;
 
     this.state = {
       error: null,
@@ -211,10 +212,10 @@ class App extends CoreComponent {
           return <ReactiveForm {...node.attribs} key={k} k={k}
             onSubmitModal={this.handleOpenModal} children={node.children} />;
         case "pfhub-portfolio":
-
           //'this.portfolio_json' prerendered JSON from prerender cache
           return <PortfolioCaseStudies pfhub_id={node.attribs.pfhub_id} key={k}
             k={k} prerender-json={this.portfolio_json} />;
+        default:
         break;
       }
     }
@@ -242,7 +243,9 @@ class App extends CoreComponent {
 
           {content}
 
-          <PageFooter items={nav_items} />
+          { /* to help with in prerendered situations to avoid 2 footers! */
+            this.prerendered_footer ? null : (<PageFooter items={nav_items} />)
+          }
         </Router>
 
         {/*for caching of navigation items when a page is prerendered from the chromedriver service */}
