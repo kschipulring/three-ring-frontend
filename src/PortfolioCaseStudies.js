@@ -198,7 +198,7 @@ export default class PortfoliosCaseStudies extends CoreComponent {
     let [first_image] = fixed_urls;
 
     //append a max width URL parameter, but only if it does not have it already.
-    first_image += /\?w\=([0-9])+/.test(first_image) ? "" : "?w=450";
+    first_image += /\?w=([0-9])+/.test(first_image) ? "" : "?w=450";
 
     let element_id = "pfhub_portfolio_pupup_element_" + item.id;
 
