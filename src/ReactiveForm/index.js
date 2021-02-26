@@ -164,10 +164,16 @@ class ReactiveForm extends React.Component {
         case "div":
           let retval = "";
 
-          if( node.attribs.class === "wpcf7-form-control-wrap" ){
-            retval = <ReCAPTCHA style={{ display: "inline-block" }}
-              sitekey={TEST_SITE_KEY} key={k} onChange={this.recapHandleChange}
-              onExpired={this.recapHandleChange} />;
+          //we are focusing only on the outermost elements in this form.
+          if( ["wpcf7-form-control-wrap", "recaptcha-outer"].includes(node.attribs.class) ){
+
+            //hack for prerendered content
+            let className = node.attribs.class === "recaptcha-outer" ? 
+              "recaptcha-inner" : "recaptcha-outer";
+
+            retval = <ReCAPTCHA style={{ display: "inline-block" }} 
+              className={className} sitekey={TEST_SITE_KEY} key={k} 
+              onChange={this.recapHandleChange} onExpired={this.recapHandleChange} />;
           }else{
             retval = convertNodeToElement(node, k);
           }
