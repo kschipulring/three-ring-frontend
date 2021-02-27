@@ -9,11 +9,15 @@ import InputTransform from './InputTransform';
 import TextAreaTransform from './TextAreaTransform';
 import SelectTransform from './SelectTransform';
 
+import CoreComponent from '../CoreComponent';
+
 import Modal from 'react-modal';
+
+import FormModal from './FormModal';
 
 const TEST_SITE_KEY = "6Le5-T4UAAAAAL09DMkA6dffu36NsuFwg2a-Q5WC";
 
-class ReactiveForm extends React.Component {
+class ReactiveForm extends CoreComponent {
   constructor(props) {
     super(props);
 
@@ -30,7 +34,8 @@ class ReactiveForm extends React.Component {
       + Math.random().toString(36).substring(2, 15);;
 
     this.state = {
-      form_valid: false
+      form_valid: false,
+      showModal: false
     };
 
     // This binding is necessary to make `this` work in the callback
@@ -47,6 +52,8 @@ class ReactiveForm extends React.Component {
   handleSubmit(event, value) {
     event.preventDefault();
 
+    this.stateUpdate({showModal: true});
+
     let values = this.model;
 
     //where form gets submitted to.
@@ -57,8 +64,7 @@ class ReactiveForm extends React.Component {
       let fid = this.action.replace(/(.)*#wpcf7-f|-o(\w)+/g, "");
 
       //this changes the action URL to that which works from the WP Rest API.
-      endpoint = Config.base_api_url + 
-      `/contact-form-7/v1/contact-forms/${fid}/feedback`;
+      endpoint = `${Config.base_api_url}/contact-form-7/v1/contact-forms/${fid}/feedback`;
     }
 
     var XHR = new XMLHttpRequest();
@@ -202,25 +208,32 @@ class ReactiveForm extends React.Component {
   }
 
   render(){
-    let {props} = this;
+    let {action, class: className="", id, name="", enctype="", k, children} = this.props;
 
-    this.action = props.action;
+    this.action = action;
 
     Modal.setAppElement('#root');
 
-    this.form_id = props.id || this.form_id;
+    this.form_id = id || this.form_id;
 
-    return <form action={props.action} className={props.class || ""}
-      id={this.form_id} name={props.name || ""} encType={props.enctype || ""}
-      k={props.k} onSubmit={this.handleSubmit} onReset={this.resetForm}>
-    {
-      props.children.map(
-        (item, k) => convertNodeToElement(item, k, (node, k) => {
-          return this.renderIfTag(node, k);
-        })
-      )
-    }
-    </form>;
+    return (
+      <form action={action} className={className}
+        id={this.form_id} name={name} encType={enctype}
+        k={k} onSubmit={this.handleSubmit} onReset={this.resetForm}>
+
+        <FormModal showModal={this.state.showModal} 
+          stateUpdate={ state => this.stateUpdate(state) }
+          handleCloseModal={this.handleCloseModal} />
+
+        {
+          children.map(
+            (item, k) => convertNodeToElement(item, k, (node, k) => {
+              return this.renderIfTag(node, k);
+            })
+          )
+        }
+      </form>
+    );
   }
 
   //unfortunate hack for fields which somehow fall by the wayside when updating the component state.
