@@ -17,7 +17,6 @@ import NavBar from './NavBar';
 
 import ReactiveForm from './ReactiveForm/index';
 //import ThreeRingModal from './ThreeRingModal';
-import FormModal from './ReactiveForm/FormModal';
 
 import PageFooter from './PageFooter';
 
@@ -237,9 +236,6 @@ class App extends CoreComponent {
           <header>
             <NavBar id="main_nav" items={nav_items} burger_menu="true" />
           </header>
-
-          <FormModal showModal={this.state.showModal}
-            handleCloseModal={this.handleCloseModal} />
 
           {content}
 

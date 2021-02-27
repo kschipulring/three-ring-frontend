@@ -1,9 +1,10 @@
 import React from 'react';
 import Carousel from "react-elastic-carousel";
-import Modal from 'react-modal';
 
 import Config from './Config';
 import CoreComponent from './CoreComponent';
+
+import ThreeRingModal from './ThreeRingModal';
 
 export default class PortfoliosCaseStudies extends CoreComponent {
   constructor(props){
@@ -223,36 +224,25 @@ export default class PortfoliosCaseStudies extends CoreComponent {
    */
   render(){
     //the carousel slides.  Goes into the modal directly.
-    var carousel_contents = this.state.modal_inner_html_array;
+    let {modal_inner_html_array: carousel_contents, contents, showModal, currentIndex} = this.state;
 
     return (
       <span>
-        {this.state.contents}
-      
-        <Modal 
-          isOpen={this.state.showModal}
-          contentLabel="Case Study closeup"
-          className="Modal"
-          overlayClassName="Overlay"
-          handleCloseModal={this.handleCloseModal} 
-        >
-          <div className="modal-content">
-            <div className="modal-header">
-              <button type="button" className="close" data-dismiss="modal" 
-                aria-label="Close" onClick={this.handleCloseModal}>
-                <span aria-hidden="true">×</span>
-              </button>
-            </div>
-            <div className="modal-body">
-              <Carousel ref={(ref) => (this.carousel = ref)}
-                initialActiveIndex={this.state.currentIndex}>
+        {contents}
 
-                {carousel_contents}
-              </Carousel>
-            </div>
-            <div className="modal-footer"> </div>
-          </div>
-        </Modal>
+        <ThreeRingModal 
+          showModal={showModal}
+          contentLabel="Case Study closeup"
+          handleCloseModal={() => this.handleCloseModal()}
+          contentFooterLabel=""
+        >
+          <Carousel ref={(ref) => (this.carousel = ref)}
+            initialActiveIndex={currentIndex}>
+
+            {carousel_contents}
+          </Carousel>
+        </ThreeRingModal>
+
         <script type="application/ld+json" id="portfolio_json">
           { JSON.stringify(this.state.portfolio_json) }
         </script>
