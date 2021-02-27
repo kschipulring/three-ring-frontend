@@ -15,7 +15,7 @@ import Modal from 'react-modal';
 
 import FormModal from './FormModal';
 
-const TEST_SITE_KEY = "6Le5-T4UAAAAAL09DMkA6dffu36NsuFwg2a-Q5WC";
+const RECAPTCHA_SITE_KEY = Config.recaptcha_site_key;
 
 class ReactiveForm extends CoreComponent {
   constructor(props) {
@@ -178,7 +178,7 @@ class ReactiveForm extends CoreComponent {
               "recaptcha-inner" : "recaptcha-outer";
 
             retval = <ReCAPTCHA style={{ display: "inline-block" }} 
-              className={className} sitekey={TEST_SITE_KEY} key={k} 
+              className={className} sitekey={RECAPTCHA_SITE_KEY} key={k} 
               onChange={this.recapHandleChange} onExpired={this.recapHandleChange} />;
           }else{
             retval = convertNodeToElement(node, k);

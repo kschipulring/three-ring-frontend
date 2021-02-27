@@ -9,4 +9,7 @@ export default class Config{
 
   static cloud_base_url = process.env.REACT_APP_CLOUD_BASE_URL;
   static cloud_uploads_url = process.env.REACT_APP_CLOUD_UPLOADS_URL;
+
+  //Config
+  static recaptcha_site_key = process.env.REACT_APP_RECAPTCHA_SITE_KEY;
 }
