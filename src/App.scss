@@ -66,6 +66,7 @@ article {
 
   p, li {
     color: #666;
+    max-width: 90%;
   }
 
   .wp-block-button__link, & .wpforms-submit{
@@ -144,6 +145,22 @@ article {
           opacity:0.5;
         }
       }
+    }
+  }
+
+  figure.wp-block-image{
+    max-width: 90%;
+    margin-top: 4em;
+
+    img{
+      max-width: 100%;
+      height: auto;
+    }
+  }
+
+  @media only screen and (max-width: $thr-max-mobile-portrait-screen) {
+    figure.wp-block-image {
+      margin-left: 0px;
     }
   }
 }

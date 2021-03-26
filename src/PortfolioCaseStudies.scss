@@ -77,6 +77,13 @@ article.case-studies{
         margin-bottom: 75px;
       }
     }
+
+    @media only screen and (max-width: $thr-big-screen) {
+      li {
+        width: 80%;
+      }
+    }
+
   }
 }
 
