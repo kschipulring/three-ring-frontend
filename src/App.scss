@@ -11,9 +11,40 @@
 @import './AboutUs';
 @import './PageFooter';
 
+/*
+for exotic fonts (non base system) that have a font face conversion
+from https://transfonter.org/
+*/
+@mixin font-crossbrowser($font_name, $weight: normal, $file_prefix: "") {
+  @if $file_prefix == "" {
+    $file_prefix: $font_name;
+  }
+
+  @font-face {
+    font-family: $font_name;
+    src: url($file_prefix +'.eot');
+  
+    src: url($file_prefix +'.eot?#iefix') format('embedded-opentype'),
+      url($file_prefix +'.woff2') format('woff2'),
+      url($file_prefix +'.woff') format('woff'),
+      url($file_prefix +'.ttf') format('truetype'),
+      url($file_prefix +'.svg#' + $file_prefix ) format('svg');
+  
+    font-weight: unquote($weight);
+    font-style: normal;
+    font-display: swap;
+  }
+}
+
+/* for elements that use the Calibri font, but have normal weight */
+@include font-crossbrowser("Calibri", "normal");
+
+/* for elements that use the Calibri font, but have bold weight */
+@include font-crossbrowser("Calibri", "bold", "Calibri-Bold");
+
 
 body {
-  font-family: calibri, Arial, Helvetica, sans-serif;
+  font-family: Calibri,calibri,Candara,Segoe,Segoe UI,Optima,Arial,Helvetica,sans-serif; 
 }
 
 button:focus {
@@ -83,7 +114,6 @@ article {
     color: white;
     font-weight: bold;
     font-size: 30px;
-    font-family: calibri;
     padding-top: 9px;
 
     &:hover{
@@ -153,7 +183,7 @@ article {
     margin-top: 4em;
 
     img{
-      max-width: 100%;
+      max-width: 95%;
       height: auto;
     }
   }
