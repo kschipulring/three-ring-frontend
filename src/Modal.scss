@@ -163,6 +163,40 @@ $modal-overlay-bg: #343434DF;
   }
 }
 
+@media only screen and (max-width: $thr-max-mobile-portrait-screen) {
+  .cukhLH, .rec-slider-container {
+    margin: 0px;
+  }
+
+  .Modal .modal-body .pfhub-portfolio-popup-wrapper{
+    width: inherit;
+
+    .image-block{
+      height: auto;
+      text-align:left;
+      width: inherit;
+
+      img{
+        width: inherit;
+      }
+    }
+
+    .right-block{
+      margin-left: inherit;
+      width: inherit;
+
+      h3.title {
+        min-width: inherit;
+        font-size: 24px;
+      }
+
+      .description{
+        min-width: inherit;
+      }
+    }
+  }
+}
+
 @media (max-width: 1380px) {
   .Modal .modal-body .pfhub-portfolio-popup-wrapper .image-block img{
     max-height: 40vh;
