@@ -168,10 +168,11 @@ class ReactiveForm extends CoreComponent {
           return <TextAreaTransform attrs={node.attribs} key={k} k={k}
             f={this.handleChange} />;
         case "div":
+        case "span":
           let retval = "";
 
-          //we are focusing only on the outermost elements in this form.
-          if( ["wpcf7-form-control-wrap", "recaptcha-outer"].includes(node.attribs.class) ){
+          //we are focusing only on the outermost elements in this form to be the recaptcha box.
+          if( node.attribs.class.includes("wpcf7-form-control-wrap") && node.attribs.class.includes("recaptcha") ){
 
             //hack for prerendered content
             let className = node.attribs.class === "recaptcha-outer" ? 
@@ -180,7 +181,7 @@ class ReactiveForm extends CoreComponent {
             retval = <ReCAPTCHA style={{ display: "inline-block" }} 
               className={className} sitekey={RECAPTCHA_SITE_KEY} key={k} 
               onChange={this.recapHandleChange} onExpired={this.recapHandleChange} />;
-          }else{
+          }else if(node.name === "div" ){
             retval = convertNodeToElement(node, k);
           }
 
