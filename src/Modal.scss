@@ -183,12 +183,26 @@ $modal-overlay-bg: #343434DF;
 
       h3.title {
         min-width: inherit;
-        font-size: 24px;
+        font-size: 21px;
+        margin-top: 11px;
+        margin-bottom: 10px;
+      }
+
+      ul.thumbs-list{
+        margin-top: 12px;
+        margin-bottom: 12px;
       }
 
       .description{
         min-width: inherit;
+        font-size: 18px;
       }
+    }
+  }
+
+  .ReactModalPortal{
+    .rec-pagination, & .bkVSTc{
+      margin-top: 0px;
     }
   }
 }
