@@ -108,13 +108,12 @@ article {
   }
 
   .wp-block-button__link, & .wpforms-submit, & .wpcf7-form-control.wpcf7-submit{
-    background-color: #9c0d0d;
     width: 302px;
     display: block;
     text-align: center;
     /*vertical-align: middle;*/
     text-decoration: none;
-    color: white;
+
     font-weight: bold;
     font-size: 30px;
     padding-top: 9px;
@@ -132,6 +131,11 @@ article {
         cursor: not-allowed;
       }
     }
+  }
+
+  .wp-block-button__link.red, & .wpforms-submit, & .wpcf7-form-control.wpcf7-submit{
+    background-color: #9c0d0d;
+    color: white;
   }
 
   a{
