@@ -78,12 +78,10 @@ button.nav_expander {
   100% { transform: rotate(-45deg) translate(-5px, -5px); }
 }
 
-
-
 nav#main_nav{
   background-color: #C55;
-  width: 388px;
-  right: 46px;
+  width: 330px;
+  right: 1px;
   position: fixed;
   z-index: 2;
 
@@ -108,6 +106,19 @@ nav#main_nav{
       color:white;
       text-decoration: none;
     }
+  }
+}
+
+@media (min-width: $thr-old-mobile-portrait-screen) {
+  nav#main_nav{
+    width: 350px;
+  }
+}
+
+@media (min-width: $thr-max-mobile-portrait-screen) {
+  nav#main_nav{
+    width: 388px;
+    right: 46px;
   }
 }
 
