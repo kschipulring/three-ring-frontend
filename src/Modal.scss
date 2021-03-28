@@ -70,8 +70,8 @@ $modal-overlay-bg: #343434DF;
         float: left;
 
         /*height: 500px;*/
-        width: 55%;
-        min-width:500px;
+        /*width: 55%;*/
+        /*min-width:500px;*/
 
         img{
           width: 90%;
@@ -84,7 +84,7 @@ $modal-overlay-bg: #343434DF;
       .right-block{
         float: left;
         width: calc(42.8% - 60px);
-        margin-left: 60px;
+        /*margin-left: 60px;*/
         text-align: left;
 
         ul{
@@ -110,12 +110,8 @@ $modal-overlay-bg: #343434DF;
           height: 75px;
         }
 
-        h3.title{
+        h3.title, & .description{
           min-width: 320px;
-        }
-
-        .description{
-          min-width: 500px;
         }
       }
     }
@@ -163,7 +159,7 @@ $modal-overlay-bg: #343434DF;
   }
 }
 
-@media only screen and (max-width: $thr-max-mobile-portrait-screen) {
+@media only screen and (max-width: $thr-medium-screen) {
   .cukhLH, .rec-slider-container {
     margin: 0px;
   }
@@ -197,9 +193,63 @@ $modal-overlay-bg: #343434DF;
   }
 }
 
-@media (max-width: 1380px) {
+@media (max-width: $thr-bigger-screen) {
   .Modal .modal-body .pfhub-portfolio-popup-wrapper .image-block img{
     max-height: 40vh;
+    min-width: 178px;
+  }
+}
+
+@media (min-aspect-ratio: 8/6) {
+  .Modal .modal-body .pfhub-portfolio-popup-wrapper .image-block{
+    width: 55%;
+  }
+
+  @media (max-width: $thr-big-screen) {
+    .Modal .modal-body .pfhub-portfolio-popup-wrapper .right-block{
+      h3.title, & .description{
+        min-width: 280px;
+      }
+
+      h3.title{
+        font-size: 24px;
+        margin-bottom: 12px;
+      }
+
+      ul.thumbs-list{
+        margin: 1px;
+      }
+
+      .description{
+        font-size: 18px;
+      }
+    }
+
+    .ReactModalPortal{
+      .modal-header{
+        margin-top: 25px;
+      }
+
+      .rec-pagination, & .bkVSTc{
+        margin-top: 1px;
+      }
+    }
+  }
+}
+
+@media (min-width: $thr-big-screen) {
+  .Modal .modal-body .pfhub-portfolio-popup-wrapper{
+    .right-block{
+      margin-left: 60px;
+    }
+  }
+}
+
+@media (min-width: $thr-bigger-screen) {
+  .Modal .modal-body .pfhub-portfolio-popup-wrapper{
+    .image-block{
+      min-width:500px;
+    }
   }
 }
 
