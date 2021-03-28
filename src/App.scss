@@ -20,6 +20,9 @@ from https://transfonter.org/
     $file_prefix: $font_name;
   }
 
+  /* where are the fonts stored? */
+  $file_prefix: "special-fonts/" + $file_prefix;
+
   @font-face {
     font-family: $font_name;
     src: url($file_prefix +'.eot');
