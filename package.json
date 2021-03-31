@@ -1,6 +1,6 @@
 {
   "name": "three-ring-frontend",
-  "version": "0.8.7",
+  "version": "0.9.5",
   "private": true,
   "dependencies": {
     "node-sass": "^4.14.1",
@@ -16,8 +16,9 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && mv build/index.html build/prerender.html && cp .htaccess build/.htaccess",
-    "postbuild": "bash post-build.sh",
+    "build": "react-scripts build && mv build/index.html build/prerender.html",
+    "prerender": "bash post-build.sh",
+    "build_prerender": "npm run build && npm run prerender",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

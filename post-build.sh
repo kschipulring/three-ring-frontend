@@ -49,4 +49,7 @@ rm -rf $dest_dir/!(.|..|.gitignore|.git|README.md)
 #copy everything in the build folder and send it to the destination folder
 cp -r build/* $dest_dir
 
+#copy the stupid and stubborn .htaccess file, which does not seem to wanna with above command.
+cp build/.htaccess ../three-ring-frontend-build/.htaccess
+
 echo "build files copied to: $dest_dir"
