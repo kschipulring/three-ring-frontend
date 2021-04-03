@@ -96,6 +96,11 @@ class App extends CoreComponent {
     //only update if this page has not been pre-rendered
     if( !this.prerendered ){
       this.menuFetchAjaxSource();
+    }else{
+      //remove extra unwanted header elements. First, grab all except the first of them.
+      var hh = document.querySelectorAll("header.nav_header:not(:first-child)");
+
+      hh.forEach( (item) => { item.remove() } );
     }
   }
 
@@ -206,6 +211,9 @@ class App extends CoreComponent {
       switch(node.name) {
         case "a":
           return Utilities.a2LinkTransform(node, k);
+        case "button":
+          //for prerendered version. Handling the non-working navbar bug only in prerendered version.
+          return node.attribs.class.includes("nav_expander") ? "" : null;
         case "form":
           return <ReactiveForm {...node.attribs} key={k} k={k}
             onSubmitModal={this.handleOpenModal} children={node.children} />;
@@ -232,7 +240,7 @@ class App extends CoreComponent {
             </Route>
           </Switch>
 
-          <header>
+          <header className="nav_header">
             <NavBar id="main_nav" items={nav_items} burger_menu="true" />
           </header>
 

@@ -17,7 +17,8 @@ export default function prerenderCache(){
     portfolio_json = JSON.parse(json_portfolio_str);
   
     //for the prerendered html originally from chromedriver via the build/prerender.html file.
-    main_html_str = document.getElementsByTagName("main")[0].outerHTML || null;
+    //main_html_str = document.getElementsByTagName("main")[0].outerHTML || null;
+    main_html_str = document.getElementsByTagName("main")[0].innerHTML || null;
 
     //if true, then App.js will not render an additional footer block
     prerendered_footer = true;
