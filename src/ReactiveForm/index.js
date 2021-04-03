@@ -172,7 +172,7 @@ class ReactiveForm extends CoreComponent {
           let retval = "";
 
           //we are focusing only on the outermost elements in this form to be the recaptcha box.
-          if( node.attribs.class.includes("wpcf7-form-control-wrap") && node.attribs.class.includes("recaptcha") ){
+          if( node.attribs.class.includes("recaptcha") ){
 
             //hack for prerendered content
             let className = node.attribs.class === "recaptcha-outer" ? 
