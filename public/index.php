@@ -1,6 +1,10 @@
 <?php
 ob_start();
-include "postrender.html";
+$template = isset($_GET["no-cache"]) && filter_var($_GET["no-cache"], FILTER_VALIDATE_BOOLEAN) ? 
+  "prerender.html" : "postrender.html";
+
+include $template;
+
 $output = ob_get_contents();
 ob_end_clean();
 
