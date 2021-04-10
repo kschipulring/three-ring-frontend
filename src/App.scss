@@ -165,21 +165,32 @@ article {
     width: 100%;
 
     .wp-block-group__inner-container{
-      display:table-row;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: flex-start;
 
       figure.wp-block-image{
-        display: table-cell;
-        height: 64px;
-        /* width: 64px; */
-        width: 10%;
-        padding-right: 26px;
-        text-align: left;
+        min-width: 64px;
+        min-height: 96px;
+        display: block;
+        flex: 1;
+        max-width: 25%;
+        margin-inline-start: 20px;
+        margin-inline-end: 20px;
 
         img{
-          height: inherit;
+          height: auto;
+          margin-top: 50%;
+          transform: translate(0%, -50%);
           width: 95%;
           filter: grayscale(1);
           opacity:0.5;
+
+          &:hover{
+            opacity: 1;
+            filter: none;
+          }
         }
       }
     }
@@ -188,11 +199,6 @@ article {
   figure.wp-block-image{
     max-width: 90%;
     margin-top: 4em;
-
-    img{
-      max-width: 95%;
-      height: auto;
-    }
   }
 
   @media only screen and (max-width: $thr-max-mobile-portrait-screen) {
