@@ -28,6 +28,9 @@ import './App.scss';
 class App extends CoreComponent {
   static current_page = "";
 
+  mainPageRendered = false;
+  portfolioRendered = false;
+
   constructor(props) {
     super(props);
 
@@ -119,9 +122,6 @@ class App extends CoreComponent {
   RouteHandle(params){
     let match = useRouteMatch();
 
-    console.log( "window.origin_pathname = " + window.origin_pathname );
-    console.log( "window.location.pathname = " + window.location.pathname );
-
     /* 
     hack for making the page scroll up to home if there are no characters in 
     the new route. (Like after when someone hits a '/home/' link, which 
@@ -156,15 +156,35 @@ class App extends CoreComponent {
     }
   }
 
+  shouldPreRender(checkObj) {
+    if( !checkObj ){
+      return;
+    }
+  
+    if( checkObj.mainPageRendered ){
+      this.mainPageRendered = true;
+    }
+  
+    if( checkObj.portfolioRendered ){
+      this.portfolioRendered = true;
+    }
+  
+    //now do the pre-render now that both the main page and also the portfolio have loaded.
+    if( this.mainPageRendered && this.portfolioRendered ){
+      Prerender.writeHTMLPrerender();
+    }
+  }
+
   //handles for the hashbang nav: uses above method.
   componentDidUpdate(){
     this.pageScrollTo();
 
     //automated pre render
     if( this.state.isLoaded && window.c && window.c.length > 2 ){
-      console.log( "Pre-rendereding..." );
+      console.log( "Pre-rendering..." );
 
-      Prerender.writeHTMLPrerender();
+      //Prerender.writeHTMLPrerender();
+      this.shouldPreRender({mainPageRendered: true});
     }
   }
 
@@ -236,11 +256,22 @@ class App extends CoreComponent {
         case "pfhub-portfolio":
           //'this.portfolio_json' prerendered JSON from prerender cache
           return <PortfolioCaseStudies pfhub_id={node.attribs.pfhub_id} key={k}
-            k={k} prerender-json={this.portfolio_json} />;
+            k={k} prerender-json={this.portfolio_json} onLoaded={this.handlePortfolioLoaded.bind(this)} />;
         default:
         break;
       }
     }
+  }
+
+  handlePortfolioLoaded(){
+    //get the main portfolio element that is rendered some time after the main page. Find out how many children it has.
+    var ppl = document.querySelectorAll( "pfhub-portfolio > *" );
+
+    if( ppl.length > 0 ){
+      this.shouldPreRender({portfolioRendered: true});
+    }
+
+    console.log( ppl.length );
   }
 
   renderInner(content, nav_items){

@@ -61,6 +61,9 @@ export default class PortfoliosCaseStudies extends CoreComponent {
     let modal_inner_html_array = this.renderModalHTML( portfolio_json );
 
     this.stateUpdate({contents, modal_inner_html_array, loaded: true, portfolio_json});
+
+    //tell the main app that the portfolio is loaded
+    this.props.onLoaded();
   }
 
   /**
