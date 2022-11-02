@@ -111,6 +111,11 @@ class App extends CoreComponent {
 
       hh.forEach( (item) => { item.remove() } );
     }
+
+    //force scroll into view for when the page is not home, but is the first page someone is visiting (like from a shared link)
+    if( window.origin_pathname.match(/[\w]/) && document.getElementById(window.origin_pathname) && window.scrollY < 500 ){
+      document.getElementById(window.origin_pathname).scrollIntoView();
+    }
   }
 
   /**
