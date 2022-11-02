@@ -21,6 +21,8 @@ import PageFooter from './PageFooter';
 
 import PortfolioCaseStudies from './PortfolioCaseStudies';
 
+import Prerender from './Prerender';
+
 import './App.scss';
 
 class App extends CoreComponent {
@@ -28,6 +30,10 @@ class App extends CoreComponent {
 
   constructor(props) {
     super(props);
+
+    window.origin_pathname = window.location.pathname;
+
+    console.log( "window.location.pathname = " + window.location.pathname );
 
     //boolean
     this.prerendered = props.prerendered;
@@ -113,6 +119,9 @@ class App extends CoreComponent {
   RouteHandle(params){
     let match = useRouteMatch();
 
+    console.log( "window.origin_pathname = " + window.origin_pathname );
+    console.log( "window.location.pathname = " + window.location.pathname );
+
     /* 
     hack for making the page scroll up to home if there are no characters in 
     the new route. (Like after when someone hits a '/home/' link, which 
@@ -150,6 +159,13 @@ class App extends CoreComponent {
   //handles for the hashbang nav: uses above method.
   componentDidUpdate(){
     this.pageScrollTo();
+
+    //automated pre render
+    if( this.state.isLoaded && window.c && window.c.length > 2 ){
+      console.log( "Pre-rendereding..." );
+
+      Prerender.writeHTMLPrerender();
+    }
   }
 
   /**
