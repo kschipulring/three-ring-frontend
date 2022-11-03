@@ -29,6 +29,14 @@ export default class Utilities {
     }
   }
 
+  static imgTransform(props, k){
+    let pa = props.attribs;
+
+    return (<img alt={pa.alt || ""} src={pa.src} className={pa.class}
+    loading={pa.loading} decoding={pa.decoding}
+    key={k} />);
+  }
+
   /**
    * Transforms a standard 'a' tag into a react router 'Link' element. This is 
    * really only necessary for a tag elements from CMS Ajax source, as other 
@@ -50,13 +58,19 @@ export default class Utilities {
       </Link>
     );
 
+    
+
     //external links outside this app
     let external_link = (<a href={node.attribs.href}
       className={node.attribs.class || "" } key={k} rel="noopener noreferrer"
       target="_blank">
       {
         node.children.map(
-          (item) => item.data || item.children.map( i => i.data || "" )
+          /*(item) => item.data || item.type || item.children.map( i => i.data || "" )*/
+
+          
+
+          (item) => item.name === "img"? Utilities.imgTransform(item, k) : item.data || item.children.map( i => i.data || "" )
         )
       }
     </a>);
