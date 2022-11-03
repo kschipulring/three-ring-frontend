@@ -275,8 +275,6 @@ class App extends CoreComponent {
     if( ppl.length > 0 ){
       this.shouldPreRender({portfolioRendered: true});
     }
-
-    console.log( ppl.length );
   }
 
   renderInner(content, nav_items){
