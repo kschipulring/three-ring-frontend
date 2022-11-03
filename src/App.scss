@@ -171,11 +171,11 @@ article {
       align-items: flex-start;
 
       figure.wp-block-image{
-        min-width: 64px;
+        min-width: 200px;
         min-height: 96px;
         display: block;
         flex: 1;
-        max-width: 25%;
+        max-width: 250px;
         margin-inline-start: 20px;
         margin-inline-end: 20px;
 
@@ -184,12 +184,16 @@ article {
           margin-top: 50%;
           transform: translate(0%, -50%);
           width: 95%;
-          filter: grayscale(1);
+          filter: grayscale(1) brightness(0.5) contrast(2.5);
           opacity:0.5;
 
           &:hover{
             opacity: 1;
-            filter: none;
+            filter: grayscale(0) brightness(1)
+            drop-shadow(0.1px 0.1px 0.79px black)
+            drop-shadow(-0.1px -0.1px 0.75px black)
+            drop-shadow(0.1px 0px 0.75px black)
+            drop-shadow(-0.1px 0px 0.8px black);
           }
         }
       }
